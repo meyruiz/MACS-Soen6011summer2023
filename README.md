@@ -6,6 +6,7 @@ The overall goal is to develop a web application that provides career service fo
 **Front-end**
 * [React](https://react.dev/) - The library used for front-end.
 * [TypeScript](https://www.typescriptlang.org/) - The programming language used for front-end.
+* [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) - The programming language used for front-end.
 **Backend-end**
 * [Flask](https://flask.palletsprojects.com/en/2.3.x/) - The lightweight python microservice framework used for back-end.
 * [Flask-RBAC](https://flask-rbac.readthedocs.io/en/latest/) - The python framework used for Role Based Access Control. 
