@@ -3,9 +3,12 @@
 The overall goal is to develop a web application that provides career service for employees and candidates. The platform allows job seekers to create and maintain their portfolios, while allowing employers to post job listings.
 
 ## Built With
-
+**Front-end**
 * [React](https://react.dev/) - The library used for front-end.
-* [Flask](https://flask.palletsprojects.com/en/2.3.x/) - The web framework used for back-end.
+* [TypeScript](https://www.typescriptlang.org/) - The programming language used for front-end.
+**Backend-end**
+* [Flask](https://flask.palletsprojects.com/en/2.3.x/) - The lightweight python microservice framework used for back-end.
+* [Flask-RBAC](https://flask-rbac.readthedocs.io/en/latest/) - The python framework used for Role Based Access Control. 
 * [MongoDB](https://www.mongodb.com/) - The database used.
 
 ## Getting Started
