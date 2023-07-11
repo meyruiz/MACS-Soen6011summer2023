@@ -1,6 +1,6 @@
 # Career Services Application
 ## About the project 
-The overall goal is to develop a web application that provides career service for employees and candidates. The platform allows job seekers to create and maintain their portfolios,browsing the posts, while allowing employers to post job listings. 
+The overall goal is to develop a web application that serves as a career service platform for employees and job-seeking candidates. The platform allows job seekers to create and maintain their portfolios,browsing the posts, while allowing employers to post job listings. The employer can also search for candidates matching their job requirements and review applications. Candidates receive notifications on being selected for an interview and employers can be notified when candidates apply to their job offer. This application will have a secure login procedure and ensure that no one can crack it easily.
 
 ## Built With
 **Front-end**
@@ -11,6 +11,7 @@ The overall goal is to develop a web application that provides career service fo
 * [Flask](https://flask.palletsprojects.com/en/2.3.x/) - The lightweight python microservice framework used for back-end.
 * [Flask-RBAC](https://flask-rbac.readthedocs.io/en/latest/) - The python framework used for Role Based Access Control. 
 * [MongoDB](https://www.mongodb.com/) - The database used.
+  
 
 ## Getting Started
 
