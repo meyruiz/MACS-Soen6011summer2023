@@ -44,8 +44,7 @@ The documentation is available on [here](https://github.com/meyruiz/MACS-Soen601
 
 - [Minutes](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki/Minutes) - Meeting minutes
 
-- [Project Task Assignment and Breakdown
-](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki/Project-Task-Assignment-and-Breakdown) - Details of the stories with team members' responsibility
+- [Sprint1](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki#sprint1) - Sprint1 documentation 
 
 ## License
 
