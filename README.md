@@ -32,9 +32,9 @@ These instructions will get you a copy of the project up and running on your loc
 ## Roadmap 
 This project adapts **Agile** development process. The duration of the project is 6 weeks; Each iteration takes between 1.5 to 2.5 weeks long, there are 4 iterations in total.
 
-* [Sprint1](https://github.com/meyruiz/MACS-Soen6011summer2023/milestone/1) - Sprint1 backlog
+* [Sprint 1](https://github.com/meyruiz/MACS-Soen6011summer2023/milestone/1) - Sprint 1 backlog
 
-* [Sprint2](https://github.com/meyruiz/MACS-Soen6011summer2023/milestone/2) - Sprint2 backlog
+* [Sprint 2](https://github.com/meyruiz/MACS-Soen6011summer2023/milestone/2) - Sprint 2 backlog
 
 See the [open issues](https://github.com/meyruiz/MACS-Soen6011summer2023/issues) for a full list of proposed open issues and plans.
 
@@ -44,10 +44,10 @@ The documentation is available on [here](https://github.com/meyruiz/MACS-Soen601
 
 [Minutes](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki/Minutes) - Meeting minutes
 
-[Sprint1](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki#sprint1)  - Sprint 1 docuemntation 
+[Sprint 1](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki#sprint1)  - Sprint 1 documentation 
  * [User Stories](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki/User-Stories#user-stories)
  * [Task Breakdown](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki/Project-Task-Assignment-and-Breakdown)
- * [Sprint 2 open issues and plan](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki/Open-issues-or-plan-for-next-Sprint#sprint-2-plan)
+ * [Sprint 2 Open Issues and Plan](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki/Open-issues-or-plan-for-next-Sprint#sprint-2-plan)
 
 ## License
 
