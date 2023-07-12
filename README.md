@@ -42,9 +42,12 @@ See the [open issues](https://github.com/meyruiz/MACS-Soen6011summer2023/issues)
 ## Documentation 
 The documentation is available on [here](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki) 
 
-- [Minutes](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki/Minutes) - Meeting minutes
+[Minutes](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki/Minutes) - Meeting minutes
 
-- [Sprint1](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki#sprint1) - Sprint1 documentation 
+[Sprint1](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki#sprint1)  - Sprint 1 docuemntation 
+ * [User Stories](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki/User-Stories#user-stories)
+ * [Task Breakdown](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki/Project-Task-Assignment-and-Breakdown)
+ * [Sprint 2 open issues and plan](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki/Open-issues-or-plan-for-next-Sprint#sprint-2-plan)
 
 ## License
 
