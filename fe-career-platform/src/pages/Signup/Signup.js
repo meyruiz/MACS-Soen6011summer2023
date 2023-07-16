@@ -8,17 +8,12 @@ import './Signup.scss';
 
 const Signup = () => {
   const [userType, setUserType] = useState('candidate');
-  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState(false);
 
   const handleUserTypeChange = (event) => {
     setUserType(event.target.value);
-  };
-
-  const handleUsernameChange = (event) => {
-    setUsername(event.target.value);
   };
 
   const handleEmailChange = (event) => {
@@ -41,7 +36,7 @@ const Signup = () => {
 
     if (!emailError) {
       // TODO: Call API to register user
-      console.log('signup submitted:', userType, username, email, password);
+      console.log('signup submitted:', userType, email, password);
     }
   };
 
@@ -62,11 +57,8 @@ const Signup = () => {
             <FormControlLabel value="Employer" control={<Radio />} label="Employer" />
           </RadioGroup>
         </div>
-        <TextField id="username" className='textfield' label="Username" variant="outlined" onChange={handleUsernameChange}/>
         <TextField id="email" className='textfield' label="Email" variant="outlined" onChange={handleEmailChange} error={emailError}/ >
         <TextField id="password" type="password" autoComplete="current-password" className='textfield' label="Password" variant="outlined" onChange={handlePasswordChange} />
-
-        {/* Add first name, last name and confirm password ?*/}
         
         <Button className="button" variant="contained">Register</Button>
       </form>
