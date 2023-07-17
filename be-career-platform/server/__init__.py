@@ -4,6 +4,7 @@ from .extensions import mongo, bcrypt
 from .auth import auth as auth_blueprint
 from .candidate import candidate as candidate_blueprint
 from .employer import employer as employer_blueprint
+from .model import User
 
 
 def create_app(config_object="server.settings"):
@@ -24,7 +25,7 @@ def create_app(config_object="server.settings"):
     def load_user(user_id):
         user = User.get_by_id(user_id)
         if user is not None:
-            return User(user["email"], user["password"], user["role"], user["_id"])
+            return user
         else:
             return None
 

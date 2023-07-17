@@ -1,6 +1,6 @@
-from flask import Blueprint, request, flash
+from flask import Blueprint, request, flash 
 from .extensions import mongo, bcrypt
-from flask_login import logout_user, login_required, login_user
+from flask_login import logout_user, login_required, login_user 
 from .model import User
 
 auth = Blueprint('auth', __name__)
@@ -11,7 +11,7 @@ def login():
     password = request.json["password"]
     find_user = mongo.db.users.find_one({"email": email})
     if User.login_valid(email, password):
-        loguser = User(find_user["_id"], find_user["email"], find_user["password"])
+        loguser = User(find_user["email"], find_user["password"], find_user["role"], find_user["_id"])
         login_user(loguser)
         flash('You have been logged in!', 'success')
         return 'You have been logged in!'
@@ -33,7 +33,7 @@ def signup():
         return "signed up"
     else:
         flash(f'Account already exists for {email}!', 'success')
-    return f"Account already exists for {email}!"
+        return f"Account already exists for {email}!"
     
 
 @auth.route('/logout', methods=['POST'])
