@@ -1,2 +1,4 @@
 # misc
 .DS_Store
+be-career-platform/venv/
+be-career-platform/server/__pycache__/
