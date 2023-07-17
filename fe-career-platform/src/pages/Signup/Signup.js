@@ -5,6 +5,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import './Signup.scss';
+import { Link } from '@mui/material';
 
 const Signup = () => {
   const [userType, setUserType] = useState('candidate');
@@ -62,6 +63,11 @@ const Signup = () => {
         
         <Button className="button" variant="contained">Register</Button>
       </form>
+      <Link className="link"
+        underline="hover"
+        color="inherit"
+        href="/login">
+        Already having a account? Login</Link>
     </div>
   );
 };
