@@ -29,7 +29,7 @@ Data Security and Privacy: The login credentials are high security which does no
   
 **Backend-end**
 * [Flask](https://flask.palletsprojects.com/en/2.3.x/) - The lightweight python microservice framework used for back-end.
-* [Flask-RBAC](https://flask-rbac.readthedocs.io/en/latest/) - The python framework used for Role Based Access Control. 
+* [Flask-login](https://flask-login.readthedocs.io/en/latest/) - The python framework used for Flask microservice user and session management. 
 * [MongoDB](https://www.mongodb.com/) - The database used.
   
 
@@ -68,6 +68,32 @@ The documentation is available on [here](https://github.com/meyruiz/MACS-Soen601
  * [User Stories](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki/User-Stories#user-stories)
  * [Task Breakdown](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki/Project-Task-Assignment-and-Breakdown)
  * [Sprint 2 Open Issues and Plan](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki/Open-issues-or-plan-for-next-Sprint#sprint-2-plan)
+
+## Backend Environment Setup
+**MongoDB Docker Setup**
+```
+$docker pull mongo
+$docker run -d -p 27017:27017 -v {/your/local/directory}:/data/db --name mymongo mongo:latest
+$brew install mongosh
+$mongosh localhost:27017
+
+basic mongodb commands:
+>show dbs
+>db.user.insert({ "name": "soen6011_db" })
+>use soen6011_db
+>show collections
+>db.users.find()
+```
+
+**Flask Framework Setup**
+```
+$git clone git@github.com:meyruiz/MACS-Soen6011summer2023.git
+$cd be-career-platform
+$python3 -m venv venv
+$source venv/bin/activate
+$pip3 install -r requirements.txt
+$flask run
+```
 
 ## License
 
