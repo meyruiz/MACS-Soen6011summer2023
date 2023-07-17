@@ -91,7 +91,7 @@ $git clone git@github.com:meyruiz/MACS-Soen6011summer2023.git
 $cd be-career-platform
 $python3 -m venv venv
 $source venv/bin/activate
-$pip3 install -r requirements.txt
+$pip3 install -r requirement.txt
 $flask run
 ```
 
