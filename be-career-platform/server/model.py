@@ -1,7 +1,7 @@
 from .extensions import mongo
 from flask_login import UserMixin
 from .extensions import bcrypt
-from flask import session, flash
+from flask import session
 import uuid
 
 class User(UserMixin):
