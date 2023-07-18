@@ -1,7 +1,7 @@
 from .extensions import mongo
 from flask import Blueprint,request, flash, jsonify
 from flask_login import login_required, current_user
-from .model import User, JobPosting
+from .model import User, JobPosting, Status, Application
 from bson import json_util
 
 employer = Blueprint('employer', __name__)
@@ -103,3 +103,16 @@ def findAllJobs():
         return jsonify(records_list) , 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
+
+@employer.route('/employer/application/<application_id>/update', methods=['PUT'])
+def changeApplicationStatusByEmployer(application_id):
+    try:    
+        if Status.is_valid_for_employer(status) is True:
+            result = Application.update_status(application_id,status)
+            return {"applicationID": application_id}, 200
+        else:
+            return jsonify({'error': 'not valid status'}), 400
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+
+    
