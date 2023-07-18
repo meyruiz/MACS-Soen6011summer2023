@@ -1,10 +1,10 @@
 import { AppBar, Box, IconButton, Link, Menu, MenuItem, Toolbar, Typography } from "@mui/material";
-import React from "react";
-import UserProfile from "../../../Model/UserProfile";
+import React, { useEffect } from "react";
 
 export default function Navbar() {
-  const [auth, setAuth] = React.useState(UserProfile.getName());
+  // const [auth, setAuth] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [user, setUser] = React.useState(false);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -15,8 +15,29 @@ export default function Navbar() {
   };
 
   const handleLogout = () => {
-    setAuth(false);
+    setUser(false);
+    localStorage.clear();
   }
+
+  const userEmail = () => {
+    return localStorage.getItem("userEmail");
+  }
+
+  const userRole = () => {
+    return localStorage.getItem("userRole");
+  }
+
+  useEffect(() => {
+    const loggedInUserID = localStorage.getItem("userid");
+    const loggedInUserEmail = localStorage.getItem("userEmail");  
+    const loggedInUserRole = localStorage.getItem("userRole");
+    // console.log('loggedInUser -- ',loggedInUserID);
+    // console.log('loggedInUser -- ',loggedInUserEmail);
+    // console.log('loggedInUser -- ',loggedInUserRole);
+    if (loggedInUserID && loggedInUserEmail && loggedInUserRole) {
+      setUser(true)
+    }
+  }, []);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -30,7 +51,7 @@ export default function Navbar() {
                   href="/">CSA</Link>
           </Typography>
           {/* User doesn't login */}
-          {!auth && (
+          {!user && (
             <div>
                 <IconButton
                   size="large"
@@ -45,7 +66,7 @@ export default function Navbar() {
             </div>
           )}
           {/* User logined */}
-          {auth && (
+          {user && (
             <div>
               <IconButton
                 size="large"
@@ -55,7 +76,7 @@ export default function Navbar() {
                 onClick={handleMenu}
                 color="inherit"
               >
-                Username In here
+                Hello, {userEmail()} ({userRole()})
               </IconButton>
               <Menu
                 id="menu-appbar"

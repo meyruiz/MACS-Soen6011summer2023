@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import './Signup.scss';
 import { Link } from '@mui/material';
-import axios from 'axios';
+import ApiFun from '../../Service/api';
 
 export default function Signup() {
   const [userType, setUserType] = useState('candidate');
@@ -37,21 +37,16 @@ export default function Signup() {
     event.preventDefault();
 
     if (!emailError) {
-      // TODO: Call API to register user
       console.log('signup submitted:', userType, email, password);
-      // const token = loginUser(userType, email, password);
-      // console.log('token' ,token)
-      const baseURL = "https://7140-66-22-167-208.ngrok-free.app"
-      axios.post(`${baseURL}/signup`, {
-        // userType,
-        role: userType,
-        email,
-        password
-      }).then((res) => {
-        console.log('res: ', res);
-      }).then((err) => {
-        console.log('err: ', err);
-      })
+
+      const user = {role:userType, email, password}
+      ApiFun.postApi("/signup", user)
+          .then((e) => {
+              if(e.status === 200){
+                // console.log(e.data);
+                window.location.href = "/login";
+              }
+            })
     }
   };
 
@@ -70,8 +65,8 @@ export default function Signup() {
             name="radio-buttons-group"
             onChange={handleUserTypeChange}
           >
-            <FormControlLabel value="Candidate" control={<Radio />} label="Candidate" />
-            <FormControlLabel value="Employer" control={<Radio />} label="Employer" />
+            <FormControlLabel value="Candidate" control={<Radio />} label="candidate" />
+            <FormControlLabel value="Employer" control={<Radio />} label="employer" />
           </RadioGroup>
         </div>
         <TextField id="email" className='textfield' label="Email" variant="outlined" onChange={handleEmailChange} error={emailError}/ >
