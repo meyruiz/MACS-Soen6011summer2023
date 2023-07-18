@@ -2,6 +2,7 @@ from .extensions import mongo
 from flask import Blueprint,request, flash, jsonify
 from flask_login import login_required, current_user
 from .model import User, JobPosting
+from bson import json_util
 
 employer = Blueprint('employer', __name__)
 
@@ -90,5 +91,15 @@ def deleteJob(employer_id,job_id):
         #todo delete associated application tracking  
 
         return {"jobId": job_id}, 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+
+@employer.route('/jobs/all', methods=['GET'])
+def findAllJobs():
+    #todo do authentication
+    try:
+        records = list(JobPosting.get_allJobs())
+        records_list = [record for record in records]
+        return jsonify(records_list) , 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
