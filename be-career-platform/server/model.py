@@ -21,6 +21,29 @@ class User(UserMixin):
     def get_id(self):
         return self._id
 
+class Job():
+#I assume the elements that identify a job are as follows
+    def __init__(self,jobId,jobDescription,candidatesApplied,positions,userRole):
+        self.jobId = jobId
+        self.jobDes = jobDescription
+        self.emptypositions = positions -candidatesApplied
+        self.userRole = userRole
+
+
+    def leftoverpositions(self):
+        return self.emptypositions
+    def displayJob(self):
+        return jobDes
+    def getJobId(self):
+        return self.jobId
+    def openJobs(self):
+        if self.emptypositions == 0:
+            return False
+        else return True
+    
+    
+
+
     @classmethod
     def get_by_email(cls, email):
         data = mongo.db.users.find_one({"email": email})
