@@ -97,3 +97,25 @@ def getJobByJobId(employer_id,job_id):
 def getJobsByEmployerId(employer_id):
     jobLists = JobPosting.get_jobListsBYEmployerId(employer_id)
     return jsonify(list(jobLists)) , 200
+
+@employer.route('/employer/<employer_id>/<job_id>', methods=['PUT'])
+def updateJob(employer_id,job_id):
+    #todo authentication
+    # user = mongo.db.users.find_one({"_id": employer_id})
+    # if user == None:
+    #     flash('Not logined', 'danger')
+    #     return "failed authentication"
+    try: 
+        fields = ["jobTitle","jobDescription","companyName"]
+        updateInfo = {}
+        json_keys = list(request.json.keys()) if request.is_json else []
+        
+        for key in json_keys:
+            if key not in fields:
+                raise Exception(key)
+            else:
+                updateInfo[key] = request.json[key]
+        result = JobPosting.put(job_id,updateInfo)
+        return {"jobId": job_id}, 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400

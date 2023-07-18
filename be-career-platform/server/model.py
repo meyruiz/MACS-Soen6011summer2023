@@ -91,6 +91,15 @@ class JobPosting():
         job = mongo.db.jobs.find({"employerId":employerId})
         return job 
         
+    @classmethod
+    def put(cls, jobId,updateInfo):
+        filter = {"_id": jobId}
+        update = {"$set": updateInfo}
+        result = mongo.db.jobs.update_one(filter, update)
+        print("--------")
+        print(str(result))
+        return result
+
     def playloadToInsert(self):
         return {
             "employerId": self.employerId,
