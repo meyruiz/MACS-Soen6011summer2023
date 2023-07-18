@@ -1,6 +1,6 @@
-from flask import Blueprint, request, flash 
+from flask import Blueprint, request, flash
 from .extensions import mongo, bcrypt
-from flask_login import logout_user, login_required, login_user 
+from flask_login import logout_user, login_required, login_user
 from .model import User
 
 auth = Blueprint('auth', __name__)

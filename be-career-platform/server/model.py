@@ -2,6 +2,7 @@ from .extensions import mongo
 from flask_login import UserMixin
 from .extensions import bcrypt
 from flask import session
+from datetime import datetime
 import uuid
 
 class User(UserMixin):
@@ -62,3 +63,61 @@ class User(UserMixin):
 
     def save_to_mongo(self):
         mongo.db.users.insert_one(self.json())
+
+class JobPosting():
+    def __init__(self, employerId, jobTitle, jobDescription, companyName, _id=None):
+        self.employerId = employerId
+        self.jobTitle = jobTitle
+        self.jobDescription = jobDescription
+        self.companyName = companyName
+        self._id = uuid.uuid4().hex if _id is None else _id
+
+    # def is_authenticated(self):
+    #     return True
+    # def is_active(self):
+    #     return True
+    # def is_anonymous(self):
+    #     return False
+    def get_jobId(self):
+        return self._id
+
+    @classmethod
+    def get_jobBYJobId(cls,jobId):
+        job = mongo.db.jobs.find_one({"_id":jobId})
+        return job
+
+    @classmethod
+    def get_jobListsBYEmployerId(cls,employerId):
+        job = mongo.db.jobs.find({"employerId":employerId})
+        return job 
+        
+    @classmethod
+    def put(cls, jobId,updateInfo):
+        filter = {"_id": jobId}
+        update = {"$set": updateInfo}
+        result = mongo.db.jobs.update_one(filter, update)
+        return result
+    
+    @classmethod
+    def delete(cls,jobId):
+        result = mongo.db.jobs.find_one_and_delete({"_id": jobId})
+        if result:
+            return f"Deleted document with ID: {jobId}"
+        else:
+            raise Exception(f"No job found with jobID: {jobId}")
+
+        #todo delete associated application tracking  
+
+    def playloadToInsert(self):
+        return {
+            "employerId": self.employerId,
+            "_id": self._id,
+            "jobTitle": self.jobTitle,
+            "jobDescription": self.jobDescription,
+            "companyName":self.companyName,
+            "creation_date": datetime.now()
+        }
+
+    def save_to_mongo(self):
+        mongo.db.jobs.insert_one(self.playloadToInsert())
+
