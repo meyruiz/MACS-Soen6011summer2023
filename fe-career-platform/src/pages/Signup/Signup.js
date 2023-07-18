@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import './Signup.scss';
 import { Link } from '@mui/material';
-import axios from 'axios';
+import ApiFun from '../../Service/api';
 
 export default function Signup() {
   const [userType, setUserType] = useState('candidate');
@@ -39,19 +39,21 @@ export default function Signup() {
     if (!emailError) {
       // TODO: Call API to register user
       console.log('signup submitted:', userType, email, password);
-      // const token = loginUser(userType, email, password);
-      // console.log('token' ,token)
-      const baseURL = "https://7140-66-22-167-208.ngrok-free.app"
-      axios.post(`${baseURL}/signup`, {
-        // userType,
-        role: userType,
-        email,
-        password
-      }).then((res) => {
-        console.log('res: ', res);
-      }).then((err) => {
-        console.log('err: ', err);
-      })
+
+      const user = {userType, email, password}
+      ApiFun.postApi("/signup", user)
+          .then((e) => {
+              if(e.status === 200){
+                console.log(e.data);
+                // localStorage.setItem('userid', e.data.id);
+                // localStorage.setItem('userEmail', e.data.email);
+                // localStorage.setItem('userRole', e.data.role);
+                // console.log(localStorage.getItem('userid'));
+                // console.log(localStorage.getItem('userEmail'));
+                // console.log(localStorage.getItem('userRole'));
+                window.location.href = "/login";
+              }
+            })
     }
   };
 

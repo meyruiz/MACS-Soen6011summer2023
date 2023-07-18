@@ -3,6 +3,7 @@ import './Login.scss'
 import { Button, FormControlLabel, Link, Radio, RadioGroup, TextField, dividerClasses } from "@mui/material";
 import axios from "axios";
 import UserProfile from "../../Model/UserProfile";
+import ApiFun from "../../Service/api";
 
 export default function Login()  {
     const [email, setEmail] = useState('');
@@ -28,18 +29,20 @@ export default function Login()  {
 
     const handleLogin = (event) => {
         event.preventDefault();
-        const baseURL = "https://7140-66-22-167-208.ngrok-free.app"
-        if (!emailError) {
-          axios.post(`${baseURL}/login`, {
-            email,
-            password
-          }).then((res) => {
-            if(res.status === 200) {
-              UserProfile.setName("Some Name");
-              window.location.href = "/";
-            } 
-          })
-        }
+        const user = {email, password};
+        ApiFun.postApi("/login", user)
+          .then((e) => {
+              if(e.status === 200){
+                console.log(e.data);
+                localStorage.setItem('userid', e.data.id);
+                localStorage.setItem('userEmail', e.data.email);
+                localStorage.setItem('userRole', e.data.role);
+                // console.log(localStorage.getItem('userid'));
+                // console.log(localStorage.getItem('userEmail'));
+                // console.log(localStorage.getItem('userRole'));
+                window.location.href = "/";
+              }
+            })
       };
 
     return (
