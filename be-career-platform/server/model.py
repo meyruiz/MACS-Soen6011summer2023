@@ -96,9 +96,17 @@ class JobPosting():
         filter = {"_id": jobId}
         update = {"$set": updateInfo}
         result = mongo.db.jobs.update_one(filter, update)
-        print("--------")
-        print(str(result))
         return result
+    
+    @classmethod
+    def delete(cls,jobId):
+        result = mongo.db.jobs.find_one_and_delete({"_id": jobId})
+        if result:
+            return f"Deleted document with ID: {jobId}"
+        else:
+            raise Exception(f"No job found with jobID: {jobId}")
+
+        #todo delete associated application tracking  
 
     def playloadToInsert(self):
         return {
