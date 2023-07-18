@@ -172,6 +172,10 @@ class Application():
         self.application_date = application_date
         self._id = uuid.uuid4().hex if _id is None else _id
 
+        # validate the status value
+        if not Status.is_valid(self.status):
+            raise ValueError(f"Invalid status value: {self.status}")
+
     @classmethod
     def get_by_id(cls, _id):
         data = mongo.db.applications.find_one({"_id": _id})
@@ -197,6 +201,11 @@ class Application():
     def update_status(cls, _id, new_status):
         filter = {"_id": _id}
         update = {"$set": {"status": new_status}}
+
+        # validate the new status value
+        if not Status.is_valid(new_status):
+            raise ValueError(f"Invalid status value: {new_status}")
+        
         result = mongo.db.applications.update_one(filter, update)
         return result
 
@@ -220,3 +229,15 @@ class Application():
 
     def save_to_mongo(self):
         mongo.db.applications.insert_one(self.json())
+
+
+class Status():
+    # define some constants for the status values
+    PENDING = "pending"
+    ACCEPTED = "accepted"
+    REJECTED = "rejected"
+
+    @classmethod
+    def is_valid(cls, status):
+        # check if a given status value is valid
+        return status in [cls.PENDING, cls.ACCEPTED, cls.REJECTED]
