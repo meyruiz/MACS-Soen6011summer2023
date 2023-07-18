@@ -88,8 +88,13 @@ class JobPosting():
 
     @classmethod
     def get_jobListsBYEmployerId(cls,employerId):
-        job = mongo.db.jobs.find({"employerId":employerId})
-        return job 
+        jobs = mongo.db.jobs.find({"employerId":employerId})
+        return jobs
+
+    @classmethod
+    def get_allJobs(cls):
+        return mongo.db.jobs.find()
+        
         
     @classmethod
     def put(cls, jobId,updateInfo):
@@ -106,7 +111,6 @@ class JobPosting():
         else:
             raise Exception(f"No job found with jobID: {jobId}")
 
-        #todo delete associated application tracking  
 
     def playloadToInsert(self):
         return {
