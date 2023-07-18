@@ -37,20 +37,13 @@ export default function Signup() {
     event.preventDefault();
 
     if (!emailError) {
-      // TODO: Call API to register user
       console.log('signup submitted:', userType, email, password);
 
-      const user = {userType, email, password}
+      const user = {role:userType, email, password}
       ApiFun.postApi("/signup", user)
           .then((e) => {
               if(e.status === 200){
-                console.log(e.data);
-                // localStorage.setItem('userid', e.data.id);
-                // localStorage.setItem('userEmail', e.data.email);
-                // localStorage.setItem('userRole', e.data.role);
-                // console.log(localStorage.getItem('userid'));
-                // console.log(localStorage.getItem('userEmail'));
-                // console.log(localStorage.getItem('userRole'));
+                // console.log(e.data);
                 window.location.href = "/login";
               }
             })
@@ -72,8 +65,8 @@ export default function Signup() {
             name="radio-buttons-group"
             onChange={handleUserTypeChange}
           >
-            <FormControlLabel value="Candidate" control={<Radio />} label="Candidate" />
-            <FormControlLabel value="Employer" control={<Radio />} label="Employer" />
+            <FormControlLabel value="Candidate" control={<Radio />} label="candidate" />
+            <FormControlLabel value="Employer" control={<Radio />} label="employer" />
           </RadioGroup>
         </div>
         <TextField id="email" className='textfield' label="Email" variant="outlined" onChange={handleEmailChange} error={emailError}/ >
