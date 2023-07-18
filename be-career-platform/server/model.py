@@ -125,3 +125,123 @@ class JobPosting():
     def save_to_mongo(self):
         mongo.db.jobs.insert_one(self.playloadToInsert())
 
+
+class Candidate(User):
+
+    def __init__(self, email, password, role, first_name, last_name, resume, _id=None):
+        super().__init__(email, password, role, _id)
+        self.first_name = first_name
+        self.last_name = last_name
+        self.resume = resume # a string or a file object
+
+    def apply_to_job(self, job_id):
+        # check if the job exists
+        job = JobPosting.get_jobBYJobId(job_id)
+        if job is None:
+            return False
+        # check if the candidate has already applied
+        application = mongo.db.applications.find_one({"candidate_id": self._id, "job_id": job_id})
+        if application is not None:
+            return False
+        # create a new application document
+        application = {
+            "candidate_id": self._id,
+            "job_id": job_id,
+            "resume": self.resume,
+            "status": "pending",
+            "application_date": datetime.now()
+        }
+        # insert the application into the database
+        mongo.db.applications.insert_one(application)
+        return True
+
+    def get_applied_jobs(self):
+        # find all the applications by the candidate
+        applications = mongo.db.applications.find({"candidate_id": self._id})
+        # get the job details for each application
+        jobs = []
+        for app in applications:
+            job = JobPosting.get_jobBYJobId(app["job_id"])
+            jobs.append(job)
+        return jobs
+
+
+class Application():
+
+    def __init__(self, candidate_id, job_id, resume, status, application_date, _id=None):
+        self.candidate_id = candidate_id
+        self.job_id = job_id
+        self.resume = resume
+        self.status = status
+        self.application_date = application_date
+        self._id = uuid.uuid4().hex if _id is None else _id
+
+        # validate the status value
+        if not Status.is_valid(self.status):
+            raise ValueError(f"Invalid status value: {self.status}")
+
+    @classmethod
+    def get_by_id(cls, _id):
+        data = mongo.db.applications.find_one({"_id": _id})
+        if data is not None:
+            return cls(**data)
+        return None
+
+    @classmethod
+    def get_by_candidate_id(cls, candidate_id):
+        data = mongo.db.applications.find({"candidate_id": candidate_id})
+        if data is not None:
+            return [cls(**app) for app in data]
+        return []
+
+    @classmethod
+    def get_by_job_id(cls, job_id):
+        data = mongo.db.applications.find({"job_id": job_id})
+        if data is not None:
+            return [cls(**app) for app in data]
+        return []
+
+    @classmethod
+    def update_status(cls, _id, new_status):
+        filter = {"_id": _id}
+        update = {"$set": {"status": new_status}}
+
+        # validate the new status value
+        if not Status.is_valid(new_status):
+            raise ValueError(f"Invalid status value: {new_status}")
+        
+        result = mongo.db.applications.update_one(filter, update)
+        return result
+
+    @classmethod
+    def delete(cls, _id):
+        result = mongo.db.applications.find_one_and_delete({"_id": _id})
+        if result:
+            return f"Deleted document with ID: {_id}"
+        else:
+            raise Exception(f"No application found with ID: {_id}")
+
+    def json(self):
+        return {
+            "candidate_id": self.candidate_id,
+            "job_id": self.job_id,
+            "resume": self.resume,
+            "status": self.status,
+            "application_date": self.application_date,
+            "_id": self._id
+        }
+
+    def save_to_mongo(self):
+        mongo.db.applications.insert_one(self.json())
+
+
+class Status():
+    # define some constants for the status values
+    PENDING = "pending"
+    ACCEPTED = "accepted"
+    REJECTED = "rejected"
+
+    @classmethod
+    def is_valid(cls, status):
+        # check if a given status value is valid
+        return status in [cls.PENDING, cls.ACCEPTED, cls.REJECTED]
