@@ -121,3 +121,42 @@ class JobPosting():
     def save_to_mongo(self):
         mongo.db.jobs.insert_one(self.playloadToInsert())
 
+
+class Candidate(User):
+
+    def __init__(self, email, password, role, first_name, last_name, resume, _id=None):
+        super().__init__(email, password, role, _id)
+        self.first_name = first_name
+        self.last_name = last_name
+        self.resume = resume # a string or a file object
+
+    def apply_to_job(self, job_id):
+        # check if the job exists
+        job = JobPosting.get_jobBYJobId(job_id)
+        if job is None:
+            return False
+        # check if the candidate has already applied
+        application = mongo.db.applications.find_one({"candidate_id": self._id, "job_id": job_id})
+        if application is not None:
+            return False
+        # create a new application document
+        application = {
+            "candidate_id": self._id,
+            "job_id": job_id,
+            "resume": self.resume,
+            "status": "pending",
+            "application_date": datetime.now()
+        }
+        # insert the application into the database
+        mongo.db.applications.insert_one(application)
+        return True
+
+    def get_applied_jobs(self):
+        # find all the applications by the candidate
+        applications = mongo.db.applications.find({"candidate_id": self._id})
+        # get the job details for each application
+        jobs = []
+        for app in applications:
+            job = JobPosting.get_jobBYJobId(app["job_id"])
+            jobs.append(job)
+        return jobs
