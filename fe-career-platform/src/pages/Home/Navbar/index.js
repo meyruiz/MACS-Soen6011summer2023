@@ -1,8 +1,9 @@
 import { AppBar, Box, IconButton, Link, Menu, MenuItem, Toolbar, Typography } from "@mui/material";
 import React from "react";
+import UserProfile from "../../../Model/UserProfile";
 
 export default function Navbar() {
-  const [auth, setAuth] = React.useState(true);
+  const [auth, setAuth] = React.useState(UserProfile.getName());
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleMenu = (event) => {
@@ -11,10 +12,6 @@ export default function Navbar() {
 
   const handleClose = () => {
     setAnchorEl(null);
-  };
-
-  const handleChange = (event) => {
-    setAuth(event.target.checked);
   };
 
   const handleLogout = () => {

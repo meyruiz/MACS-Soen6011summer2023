@@ -1,17 +1,15 @@
 import React, { useState } from "react"
 import './Login.scss'
 import { Button, FormControlLabel, Link, Radio, RadioGroup, TextField, dividerClasses } from "@mui/material";
+import axios from "axios";
+import UserProfile from "../../Model/UserProfile";
 
-const Login = () => {
-    const [userType, setUserType] = useState('canadiate');
+export default function Login()  {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [emailError, setEmailError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
     
-    const handleUserTypeChange = (event) => {
-        setUserType(event.target.value);
-    };
 
     const handleEmailChange = (event) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -28,38 +26,30 @@ const Login = () => {
         setPassword(event.target.value);
       };
 
-    const handleSubmit = (event) => {
+    const handleLogin = (event) => {
         event.preventDefault();
-    
+        const baseURL = "https://7140-66-22-167-208.ngrok-free.app"
         if (!emailError) {
-          // TODO: Call API to register user
-          console.log('signup submitted:', userType, email, password);
+          axios.post(`${baseURL}/login`, {
+            email,
+            password
+          }).then((res) => {
+            if(res.status === 200) {
+              UserProfile.setName("Some Name");
+              window.location.href = "/";
+            } 
+          })
         }
       };
 
     return (
-        <div class="container">
+        <div className="container">
             <h2>Login</h2>
-            <form onSubmit={handleSubmit}>
-                <div class='user-type-container'>
-                <label>User Type:</label>
-                <RadioGroup
-                    row
-                    aria-labelledby="demo-radio-buttons-group-label"
-                    defaultValue="candidate"
-                    name="radio-buttons-group"
-                    onChange={handleUserTypeChange}
-                >
-                    <FormControlLabel value="Candidate" control={<Radio />} label="Candidate" />
-                    <FormControlLabel value="Employer" control={<Radio />} label="Employer" />
-                    <FormControlLabel value="Admin" control={<Radio />} label="Admin" />
-
-                </RadioGroup>
-                </div>
+            <form>
                 <TextField id="email" className='textfield' label="Email" variant="outlined" onChange={handleEmailChange} error={emailError}/ >
                 <TextField id="password" type="password" autoComplete="current-password" className='textfield' label="Password" variant="outlined" onChange={handlePasswordChange} />
                 
-                <Button className="button" variant="contained">Login</Button>
+                <Button className="button" variant="contained" onClick={handleLogin}>Login</Button>
             </form>
             <Link className="link"
               underline="hover"
@@ -70,5 +60,3 @@ const Login = () => {
         </div>
     );
 };
-
-export default Login;
