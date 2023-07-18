@@ -160,3 +160,63 @@ class Candidate(User):
             job = JobPosting.get_jobBYJobId(app["job_id"])
             jobs.append(job)
         return jobs
+
+
+class Application():
+
+    def __init__(self, candidate_id, job_id, resume, status, application_date, _id=None):
+        self.candidate_id = candidate_id
+        self.job_id = job_id
+        self.resume = resume
+        self.status = status
+        self.application_date = application_date
+        self._id = uuid.uuid4().hex if _id is None else _id
+
+    @classmethod
+    def get_by_id(cls, _id):
+        data = mongo.db.applications.find_one({"_id": _id})
+        if data is not None:
+            return cls(**data)
+        return None
+
+    @classmethod
+    def get_by_candidate_id(cls, candidate_id):
+        data = mongo.db.applications.find({"candidate_id": candidate_id})
+        if data is not None:
+            return [cls(**app) for app in data]
+        return []
+
+    @classmethod
+    def get_by_job_id(cls, job_id):
+        data = mongo.db.applications.find({"job_id": job_id})
+        if data is not None:
+            return [cls(**app) for app in data]
+        return []
+
+    @classmethod
+    def update_status(cls, _id, new_status):
+        filter = {"_id": _id}
+        update = {"$set": {"status": new_status}}
+        result = mongo.db.applications.update_one(filter, update)
+        return result
+
+    @classmethod
+    def delete(cls, _id):
+        result = mongo.db.applications.find_one_and_delete({"_id": _id})
+        if result:
+            return f"Deleted document with ID: {_id}"
+        else:
+            raise Exception(f"No application found with ID: {_id}")
+
+    def json(self):
+        return {
+            "candidate_id": self.candidate_id,
+            "job_id": self.job_id,
+            "resume": self.resume,
+            "status": self.status,
+            "application_date": self.application_date,
+            "_id": self._id
+        }
+
+    def save_to_mongo(self):
+        mongo.db.applications.insert_one(self.json())
