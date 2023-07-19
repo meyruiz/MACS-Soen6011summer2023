@@ -1,0 +1,10 @@
+.resume-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    width: 50%;
+
+    .textfield {
+        margin: 10px 0;
+    }
+}
