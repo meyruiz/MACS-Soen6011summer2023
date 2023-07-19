@@ -31,7 +31,7 @@ def get_profile():
     return jsonify(candidate.json()), 200
 
 
-@candidate.route('/candidate/profile', methods=['PUT'])
+@candidate.route('/candidate/profile', methods=['POST'])
 @login_required
 def create_profile():
     if notCandidateRole():
@@ -43,6 +43,11 @@ def create_profile():
     if not data:
         return "No data provided", 400
     
+    # filter the data dictionary by keeping only the keys that are in the dir() list of the Candidate class
+    candidate = Candidate(email="", password="", role="")
+
+    data = {key: value for key, value in data.items() if hasattr(candidate, key)}
+    
     # create a new candidate object with the data
     candidate = Candidate(**data)
 
@@ -53,7 +58,7 @@ def create_profile():
     return jsonify(candidate.json()), 201
 
 
-@candidate.route('/candidate/profile', methods=['POST'])
+@candidate.route('/candidate/profile', methods=['PUT'])
 @login_required
 def update_profile():
     if notCandidateRole():

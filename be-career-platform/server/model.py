@@ -52,6 +52,8 @@ class User(UserMixin):
             new_user.save_to_mongo()
             session['email'] = email
             return True
+        elif role.lower() == "candidate":
+            Candidate(email=email, password=password, role=role).save_to_mongo()
         else:
             return False
 
@@ -130,10 +132,18 @@ class JobPosting():
 
 class Candidate(User):
 
-    def __init__(self, email: str, password: str, role: str, first_name: str, last_name: str, resume_id: str, _id=None):
+    def __init__(self, email: str, password: str, role: str, first_name: str = None, 
+                 last_name: str = None, phone_number: str = None, description: str = None, 
+                 location: str = None, skills: str = None, previous_experience: str = None, 
+                 resume_id: str = None, _id = None):
         super().__init__(email, password, role, _id)
         self.first_name = first_name
         self.last_name = last_name
+        self.phone_number = phone_number
+        self.description = description
+        self.location = location
+        self.skills = skills
+        self.previous_experience = previous_experience
         self.resume_id = resume_id
 
     def apply_to_job(self, job_id):
@@ -166,6 +176,9 @@ class Candidate(User):
             job = JobPosting.get_jobBYJobId(app["job_id"])
             jobs.append(job)
         return jobs
+    
+    def save_to_mongo(self):
+        mongo.db.candidate.insert_one(self.json())
 
 
 class Application():
