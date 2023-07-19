@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "https://7140-66-22-167-208.ngrok-free.app"
+const baseURL = "https://75d8-204-197-177-29.ngrok-free.app/"
 // const baseURL = ""
 
 class ApiFun {
