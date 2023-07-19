@@ -1,7 +1,7 @@
 from .extensions import mongo
 from flask import Blueprint,request, flash, jsonify
 from flask_login import login_required, current_user
-from .model import User, JobPosting, Application
+from .model import User, JobPosting, Application, Candidate
 from bson import json_util
 import json
 
@@ -132,8 +132,18 @@ def findAllCandidatesForOneJob(employer_id, job_id):
     applications = Application.get_by_job_id(job_id)
     apps = []
     for x in applications:
+        can = Candidate.get_by_id(x.candidate_id)
         apps.append({
-            "candidate_id": x.candidate_id,
+            "candidate": {
+                "email": can.email,
+                "first_name": can.first_name,
+                "last_name": can.last_name,
+                "phone_number": can.phone_number,
+                "description": can.description,
+                "location": can.location,
+                "skills": can.skills,
+                "previous_experience": can.previous_experience,
+            },
             "job_id": x.job_id,
             "status": x.status,
             "application_date": x.application_date,
