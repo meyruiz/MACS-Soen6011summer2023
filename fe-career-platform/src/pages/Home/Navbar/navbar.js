@@ -19,6 +19,8 @@ export default function Navbar() {
     setUser(false);
     setIsEmployer(false);
     localStorage.clear();
+    window.location.href = '/'
+    window.location.reload();
   }
 
   const userEmail = () => {
