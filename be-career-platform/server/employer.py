@@ -9,7 +9,7 @@ employer = Blueprint('employer', __name__)
 
 def notEmployerRole():
     find_user =  User.get_by_id(current_user.get_id())
-    if find_user.role != "employer":
+    if find_user.role.lower() != "employer":
         return True
     return False 
 

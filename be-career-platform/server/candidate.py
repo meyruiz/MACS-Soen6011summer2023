@@ -7,7 +7,7 @@ candidate = Blueprint('candidate', __name__)
 
 def notCandidateRole():
     find_user =  User.get_by_id(current_user.get_id())
-    if find_user.role != "candidate":
+    if find_user.role.lower() != "candidate":
         return True
     return False 
 
