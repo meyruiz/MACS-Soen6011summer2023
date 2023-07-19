@@ -1,4 +1,4 @@
-from flask import Blueprint, request, flash
+from flask import Blueprint, request, jsonify 
 from .extensions import mongo, bcrypt
 from flask_login import logout_user, login_required, login_user
 from .model import User
@@ -13,11 +13,9 @@ def login():
     if User.login_valid(email, password):
         loguser = User(find_user["email"], find_user["password"], find_user["role"], find_user["_id"])
         login_user(loguser)
-        flash('You have been logged in!', 'success')
-        return 'You have been logged in!'
+        return jsonify(status=200, id=loguser._id, email=loguser.email, role=loguser.role) #'You have been logged in!'
     else:
-        flash('Login Unsuccessful. Please check email and password', 'danger')
-        return "invalid username/password"
+        return jsonify(status=403, msg="invalid username/password")
 
 
 @auth.route('/signup', methods=['POST'])
@@ -29,15 +27,14 @@ def signup():
     find_user =  User.get_by_email(email)
     if find_user is None:
         User.register(email, password, role)
-        flash(f'Account created for {email}!', 'success')
-        return "signed up"
+        new_user = mongo.db.users.find_one({"email": email})
+        return jsonify(status=201, id=new_user._id, email=new_user.email, role=new_user.role) # "signed up"
     else:
-        flash(f'Account already exists for {email}!', 'success')
-        return f"Account already exists for {email}!"
+        return jsonify(status=403, msg=f"Account already exists for {email}!") # f"Account already exists for {email}!"
     
 
 @auth.route('/logout', methods=['POST'])
 @login_required
 def logout():
     logout_user()
-    return 'Logged out'
+    return jsonify(status=200)
