@@ -1,20 +1,13 @@
 import React, { Component, useEffect, useState } from 'react'
 import Navbar from '../Home/Navbar/navbar';
 import ApiFun from '../../Service/api';
-import { Alert, AlertTitle, Button, TextField } from '@mui/material';
+import {  Button, Card, CardContent, TextField, Typography } from '@mui/material';
 import "./JobPosting.css"
 
 export default function JobPosting() {
     const [companyName, setCompanyName] = React.useState('');
     const [jobTitle, setJobTitle] = React.useState('');
     const [jobDescription, setJobDescription] = React.useState('');
-
-    // const [successAlertBox, setSuccessAlertBox] = React.useState(false);
-    // const [failAlertBox, setFailAlertBox] = React.useState(false);
-    // const handleCloseAlertBox = () => {
-    //     setFailAlertBox(false);
-    //     setSuccessAlertBox(false);
-    // }
 
     const [openJobPostingSection, setopenJobPostingSection] = React.useState(false);
     const handleJobPostingSection = () => {
@@ -43,23 +36,27 @@ export default function JobPosting() {
         console.log(URL);
         ApiFun.postApi(URL, from)
             .then((res=> {
+                window.location.reload();
                 console.log(res);
-                
             }))
             .catch((err) => {
                 console.error(err)
             });
     }
 
+    // todo: edit the job 
+    const handleUpdate = (jobId) => {}
+
+    // todo : remove job posting by id
+    const handleRemove = (jobId) => {}
+
     const [jobPostingData, setJobPostingData] = useState([])
     useEffect(() => {
         const employer_id = localStorage.getItem('userid');
         ApiFun.getApi(`/employer/${employer_id}/jobs`).then((res) => {
-            console.log(res.data);
-            jobPostingData.push(...res.data);
-            console.log(jobPostingData)
-            // remove dupliate
-            // jobDescription.map
+            // console.log(res.data);
+            setJobPostingData([...jobPostingData, ...res.data]);
+            // console.log(jobPostingData)
         });
     },[])
 
@@ -71,7 +68,7 @@ export default function JobPosting() {
             <div className='header'>
                 <h1>List of Job Posting</h1>
                 {!openJobPostingSection && (
-                    <Button variant="contained" onClick={handleJobPostingSection}>
+                    <Button className="button-right" variant="contained" onClick={handleJobPostingSection}>
                         Create a Job Posting
                     </Button>
                 )}
@@ -114,11 +111,45 @@ export default function JobPosting() {
 
             {/* render list of job in here */}
             {
-                jobPostingData && jobPostingData.map((data) => {
+                jobPostingData && jobPostingData.map((job) => {
                     return (
-                        <div>
-                            {data._id}
-                        </div> 
+                        <Card 
+                            className='card'
+                            sx={{
+                                boxShadow: 1,
+                                borderRadius: 2,
+                                
+                                marginTop: 5,
+                                marginLeft: 5,
+                                
+                                width: 1700,
+                                height: 140
+                            }}
+                            key={job._id}
+                            >
+                                <CardContent>
+                                    <Typography gutterBottom variant="h6" component="div">
+                                        Company Name: {job.companyName}
+                                    </Typography>
+                                    <Typography gutterBottom variant="h7" component="div">
+                                        Job Title: {job.jobTitle}
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary">
+                                        Job description: {job.jobDescription}
+                                    </Typography>
+                                    {/* <Typography gutterBottom variant="h5" component="div">
+                                        Salary: {job.salary}
+                                    </Typography>
+                                    <Typography gutterBottom variant="h5" component="div">
+                                        Location: {job.location}
+                                    </Typography>
+                                    <Typography gutterBottom variant="h5" component="div">
+                                        Relatice Skills: {job.skillSets}
+                                    </Typography> */}
+                                </CardContent>
+                                {/* <Button onClick={handleRemove(job._id)}> Remove </Button> */}
+                                {/* <Button onClick={handleUpdate(job._id)}> Edit </Button> */}
+                        </Card>
                     )
                 })
             }

@@ -8,6 +8,10 @@
     margin: 20px;
 }
 
+.button-right{
+    right: 30px;
+}
+
 .textfields {
     display: flex;
     flex-direction: column;
@@ -22,6 +26,11 @@
     justify-content: center;
 
     gap: 20px;
+}
+
+.card{
+    display: flex;
+    justify-content: space-between;
 }
 
 

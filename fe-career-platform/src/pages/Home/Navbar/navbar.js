@@ -17,6 +17,7 @@ export default function Navbar() {
 
   const handleLogout = () => {
     setUser(false);
+    setIsEmployer(false);
     localStorage.clear();
   }
 
