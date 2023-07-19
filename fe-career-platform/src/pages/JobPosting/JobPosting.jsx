@@ -78,6 +78,7 @@ export default function JobPosting() {
             )}
 
             {/* Job posting form */}
+            {isEmployer && (
             <div className='header'>
                 <h1>List of Job Posting</h1>
                 {!openJobPostingSection && (
@@ -85,10 +86,11 @@ export default function JobPosting() {
                         Create a Job Posting
                     </Button>
                 )}
-            </div>
+            </div>)}
+            
                 
         
-            {openJobPostingSection && (
+            {(isEmployer && openJobPostingSection) && (
                 <form>
                     <div className='textfields'>
 
@@ -124,7 +126,7 @@ export default function JobPosting() {
 
             {/* render list of job in here */}
             {
-                jobPostingData && jobPostingData.map((job) => {
+                isEmployer && jobPostingData && jobPostingData.map((job) => {
                     return (
                         <Card 
                             className='card'
