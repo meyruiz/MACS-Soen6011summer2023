@@ -146,6 +146,13 @@ class Candidate(User):
         self.previous_experience = previous_experience
         self.resume_id = resume_id
 
+    @classmethod
+    def get_by_id(cls, _id):
+        data = mongo.db.candidate.find_one({"_id": _id})
+        if data is not None:
+            return cls(**data)
+        return None
+
     def apply_to_job(self, job_id):
         # check if the job exists
         job = JobPosting.get_jobBYJobId(job_id)
@@ -159,7 +166,6 @@ class Candidate(User):
         application = {
             "candidate_id": self._id,
             "job_id": job_id,
-            "resume_id": self.resume_id,
             "status": "pending",
             "application_date": datetime.now()
         }
@@ -177,6 +183,22 @@ class Candidate(User):
             jobs.append(job)
         return jobs
     
+    def json(self):
+        return {
+            "email": self.email,
+            "_id": self._id,
+            "password": self.password,
+            "role": self.role,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "phone_number": self.phone_number,
+            "description": self.description,
+            "location": self.location,
+            "skills": self.skills,
+            "previous_experience": self.previous_experience,
+            "resume_id": self.resume_id
+        }
+
     def save_to_mongo(self):
         mongo.db.candidate.insert_one(self.json())
 
@@ -264,9 +286,10 @@ class Status():
 
 class Resume():
 
-    def __init__(self, name: str, email: str, phone: str, education: list[dict], skills: list[str], experience: list[dict], file: dict, _id: str = None):
+    def __init__(self, first_name: str, last_name: str, email: str, phone: str = None, education: list[dict] = None, skills: list[str] = None, experience: list[dict] = None, file: dict = None, _id: str = None):
         # initialize the common attributes of the resume object
-        self.name = name
+        self.first_name = first_name
+        self.last_name = last_name
         self.email = email
         self.phone = phone
         self.education = education
@@ -294,12 +317,14 @@ class Resume():
     def json(self):
         # return a dictionary representation of the dynamic resume object
         return {
-            "name": self.name,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
             "email": self.email,
             "phone": self.phone,
             "education": self.education,
             "skills": self.skills,
             "experience": self.experience,
+            "file": self.file,
             "_id": self._id
         }
 
