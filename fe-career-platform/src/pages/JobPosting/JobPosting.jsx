@@ -51,7 +51,16 @@ export default function JobPosting() {
     const handleRemove = (jobId) => {}
 
     const [jobPostingData, setJobPostingData] = useState([])
+    const [isEmployer, setIsEmployer] = useState(false)
     useEffect(() => {
+        const role = localStorage.getItem('userRole');
+        // console.log(role)
+
+        // double check if user is an employer
+        if(role === 'Employer') {
+            setIsEmployer(true);
+        }
+
         const employer_id = localStorage.getItem('userid');
         ApiFun.getApi(`/employer/${employer_id}/jobs`).then((res) => {
             // console.log(res.data);
@@ -63,6 +72,10 @@ export default function JobPosting() {
     return (
         <>
             <Navbar/>
+
+            {!isEmployer && (
+                <div>Empolyer Only Page</div>
+            )}
 
             {/* Job posting form */}
             <div className='header'>
