@@ -21,6 +21,7 @@ export default function Navbar() {
 
   const handleLogout = () => {
     setUser(false);
+    setIsEmployer(false);
     localStorage.clear();
   }
 
@@ -71,6 +72,18 @@ export default function Navbar() {
                   href="/login">
                     Login
                 </IconButton>
+            </div>
+          )}
+          {isEmployer && (
+            <div>
+              <IconButton
+                size="large"
+                // onClick={handleMenu}
+                color="inherit"
+                href="/employer/jobposting"
+              >
+                JobPosting
+              </IconButton>
             </div>
           )}
           {/* User logined */}
