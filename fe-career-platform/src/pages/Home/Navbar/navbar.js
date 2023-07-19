@@ -5,6 +5,7 @@ export default function Navbar() {
   // const [auth, setAuth] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [user, setUser] = React.useState(false);
+  const [isEmployer, setIsEmployer] = React.useState(false);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -13,6 +14,10 @@ export default function Navbar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleProfile = () => {
+    window.location.href = "/candidate/profile";
+  }
 
   const handleLogout = () => {
     setUser(false);
@@ -35,7 +40,10 @@ export default function Navbar() {
     // console.log('loggedInUser -- ',loggedInUserEmail);
     // console.log('loggedInUser -- ',loggedInUserRole);
     if (loggedInUserID && loggedInUserEmail && loggedInUserRole) {
-      setUser(true)
+      setUser(true);
+      if(loggedInUserRole === "Employer"){
+        setIsEmployer(true)
+      }
     }
   }, []);
 
@@ -93,7 +101,9 @@ export default function Navbar() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                {!isEmployer && 
+                  <MenuItem onClick={handleProfile}>Profile</MenuItem> 
+                }
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </div>
