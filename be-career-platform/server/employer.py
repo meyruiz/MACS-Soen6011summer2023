@@ -1,8 +1,9 @@
 from .extensions import mongo
 from flask import Blueprint,request, flash, jsonify
 from flask_login import login_required, current_user
-from .model import User, JobPosting
+from .model import User, JobPosting, Application, Candidate
 from bson import json_util
+import json
 
 employer = Blueprint('employer', __name__)
 
@@ -17,14 +18,14 @@ def notEmployerRole():
 @login_required
 def index():
     if notEmployerRole():
-        return "You are not an employer."
+        return jsonify(status=403, msg="You are not an employer.")
     return "in employer index"
 
 @employer.route('/employer/profile')
 @login_required
 def profile():
     if notEmployerRole():
-        return "You are not an employer."
+        return jsonify(status=403, msg="You are not an employer.")
     return "in employer profile"
 
 
@@ -115,3 +116,36 @@ def changeApplicationStatusByEmployer(application_id):
             return jsonify({'error': 'not valid status'}), 400
     except Exception as e:
         return jsonify({'error': str(e)}), 400
+
+@employer.route('/employer/<employer_id>/jobs/<job_id>/candidates', methods=['GET'])
+# @login_required
+def findAllCandidatesForOneJob(employer_id, job_id):
+    if notEmployerRole():
+        return jsonify(status=403, msg="You are not an employer.")
+    # current_user_id = current_user.get_id()
+    current_user_id = employer_id
+    job = JobPosting.get_jobBYJobId(job_id)
+    if job is None:
+        return jsonify(status=404, msg="Job is not found.")
+    if job["employerId"] != current_user_id:
+        return jsonify(status=403, msg="You are not the owner of this job posting.")
+    applications = Application.get_by_job_id(job_id)
+    apps = []
+    for x in applications:
+        can = Candidate.get_by_id(x.candidate_id)
+        apps.append({
+            "candidate": {
+                "email": can.email,
+                "first_name": can.first_name,
+                "last_name": can.last_name,
+                "phone_number": can.phone_number,
+                "description": can.description,
+                "location": can.location,
+                "skills": can.skills,
+                "previous_experience": can.previous_experience,
+            },
+            "job_id": x.job_id,
+            "status": x.status,
+            "application_date": x.application_date,
+        })
+    return jsonify(status=200, result=apps)
