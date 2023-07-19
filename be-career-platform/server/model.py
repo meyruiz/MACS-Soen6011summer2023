@@ -1,5 +1,4 @@
 import uuid
-import bson
 
 from .extensions import mongo
 from flask_login import UserMixin
@@ -131,11 +130,11 @@ class JobPosting():
 
 class Candidate(User):
 
-    def __init__(self, email, password, role, first_name, last_name, resume, _id=None):
+    def __init__(self, email: str, password: str, role: str, first_name: str, last_name: str, resume_id: str, _id=None):
         super().__init__(email, password, role, _id)
         self.first_name = first_name
         self.last_name = last_name
-        self.resume = resume # a string or a file object
+        self.resume_id = resume_id
 
     def apply_to_job(self, job_id):
         # check if the job exists
@@ -150,7 +149,7 @@ class Candidate(User):
         application = {
             "candidate_id": self._id,
             "job_id": job_id,
-            "resume": self.resume,
+            "resume_id": self.resume_id,
             "status": "pending",
             "application_date": datetime.now()
         }
@@ -171,10 +170,9 @@ class Candidate(User):
 
 class Application():
 
-    def __init__(self, candidate_id, job_id, resume, status, application_date, _id=None):
+    def __init__(self, candidate_id: str, job_id: str, status: str, application_date: str, _id: str = None):
         self.candidate_id = candidate_id
         self.job_id = job_id
-        self.resume = resume
         self.status = status
         self.application_date = application_date
         self._id = uuid.uuid4().hex if _id is None else _id
@@ -228,7 +226,6 @@ class Application():
         return {
             "candidate_id": self.candidate_id,
             "job_id": self.job_id,
-            "resume": self.resume,
             "status": self.status,
             "application_date": self.application_date,
             "_id": self._id
@@ -248,16 +245,20 @@ class Status():
     @classmethod
     def is_valid(cls, status):
         # check if a given status value is valid
-        return status in [cls.PENDING, cls.ACCEPTED, cls.REJECTED]
+        return status in [cls.PENDING, cls.ACCEPTED, cls.ACCEPTED, cls.REJECTED]
 
 
 class Resume():
 
-    def __init__(self, name: str, email: str, phone: str, _id: str = None):
+    def __init__(self, name: str, email: str, phone: str, education: list[dict], skills: list[str], experience: list[dict], file: dict, _id: str = None):
         # initialize the common attributes of the resume object
         self.name = name
         self.email = email
         self.phone = phone
+        self.education = education
+        self.skills = skills
+        self.experience = experience
+        self.file = file
         self._id = uuid.uuid4().hex if _id is None else _id
 
     @classmethod
@@ -265,11 +266,7 @@ class Resume():
         # find a resume document by its ID in the database
         data = mongo.db.resumes.find_one({"_id": _id})
         if data is not None:
-            # determine the type of the resume and return the appropriate object
-            if data["type"] == "dynamic":
-                return DynamicResume(**data)
-            elif data["type"] == "pdf":
-                return PdfResume(**data)
+            return data
         return None
 
     @classmethod
@@ -277,30 +274,9 @@ class Resume():
         # find a resume document by the email of the candidate
         data = mongo.db.resumes.find_one({"email": email})
         if data is not None:
-            # determine the type of the resume and return the appropriate object
-            if data["type"] == "dynamic":
-                return DynamicResume(**data)
-            elif data["type"] == "pdf":
-                return PdfResume(**data)
+            return data
         return None
-
-    def json(self):
-        # return a dictionary representation of the resume object
-        raise NotImplementedError("Subclass must implement this method")
-
-    def save_to_mongo(self):
-        # insert a resume document into the database using the json method
-        mongo.db.resumes.insert_one(self.json())
-
-class DynamicResume(Resume):
-
-    def __init__(self, name: str, email: str, phone: str, education: list[dict], skills: list[str], experience: list[dict], _id:str = None):
-        # initialize the attributes of the dynamic resume object
-        super().__init__(name, email, phone, _id)
-        self.education = education
-        self.skills = skills
-        self.experience = experience
-
+    
     def json(self):
         # return a dictionary representation of the dynamic resume object
         return {
@@ -310,25 +286,10 @@ class DynamicResume(Resume):
             "education": self.education,
             "skills": self.skills,
             "experience": self.experience,
-            "_id": self._id,
-            "type": "dynamic" # indicate the type of the resume
+            "_id": self._id
         }
 
+    def save_to_mongo(self):
+        # insert a resume document into the database using the json method
+        mongo.db.resumes.insert_one(self.json())
 
-class PdfResume(Resume):
-
-    def __init__(self, name: str, email: str, phone: str, file:bson.Binary, _id: str = None):
-        # initialize the attributes of the pdf resume object
-        super().__init__(name, email, phone, _id)
-        self.file = bson.Binary(file) # a binary object with the pdf content
-
-    def json(self):
-        # return a dictionary representation of the pdf resume object
-        return {
-            "name": self.name,
-            "email": self.email,
-            "phone": self.phone,
-            "file": self.file,
-            "_id": self._id,
-            "type": "pdf" # indicate the type of the resume
-        }
