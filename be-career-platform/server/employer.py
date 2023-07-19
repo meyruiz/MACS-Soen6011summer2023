@@ -103,3 +103,15 @@ def findAllJobs():
         return jsonify(records_list) , 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
+
+@employer.route('/employer/application/<application_id>/update', methods=['PUT'])
+def changeApplicationStatusByEmployer(application_id):
+    try:
+        status = request.json["status"]
+        if  status in ["interview","rejected","accepted"]:
+            result = Application.update_status(application_id,status)
+            return {"applicationID": application_id}, 200
+        else:
+            return jsonify({'error': 'not valid status'}), 400
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
