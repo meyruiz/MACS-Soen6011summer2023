@@ -28,7 +28,7 @@ def signup():
     if find_user is None:
         User.register(email, password, role)
         new_user = mongo.db.users.find_one({"email": email})
-        return jsonify(status=201, id=new_user._id, email=new_user.email, role=new_user.role) # "signed up"
+        return jsonify(status=201, id=new_user["_id"], email=new_user["email"], role=new_user["role"]) # "signed up"
     else:
         return jsonify(status=403, msg=f"Account already exists for {email}!") # f"Account already exists for {email}!"
     
