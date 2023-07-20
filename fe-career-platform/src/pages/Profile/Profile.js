@@ -13,8 +13,9 @@ export default function Profile() {
     const [phone_number, setPhoneNumber] = useState('');
     const [previous_experience, setPreviousExperience] = useState('');
     const [skills, setSkills] = useState('');
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [pdf, setPdf] = useState('');
+    const [selectedFile, setSelectedFile] = useState('');
+    const [pdf, setPdf] = useState('test');
+    const [resume_id, setResumeId] = useState('');
 
 
     const handleFileChange = (event) => {
@@ -28,8 +29,9 @@ export default function Profile() {
                 console.log(base64String);
             };
             reader.readAsDataURL(selectedFile);
-        //setPdf(base64String);
+    };
 
+    const handleUpdateResume = (event) => {
         const candidate_id = localStorage.getItem('userid');
         const resumeForm = { pdf }
 
@@ -41,7 +43,7 @@ export default function Profile() {
             .catch((err) => {
                 console.error(err)
             });
-    };
+    }
 
     const handleFirstNameChange = (event) => {
         setFirstName(event.target.value);
@@ -97,8 +99,17 @@ export default function Profile() {
             setPhoneNumber(res.data.phone_number);
             setPreviousExperience(res.data.previous_experience);
             setSkills(res.data.skills);
+            setResumeId(res.data.resume_id);
         });
-    },[])
+
+        if (resume_id !== '') {
+            ApiFun.getApi(`/candidate/resume/${resume_id}`).then((res) => {
+                console.log(res.data);
+                setPdf(res.data.file.pdf);
+            });
+        }
+    
+    },[resume_id])
 
   return (
     <div>
@@ -140,6 +151,7 @@ export default function Profile() {
                 <iframe src={pdf} width="100%" height="600px" title="PDF Viewer" /> 
            
            </div> 
+           <Button className="button" variant="contained" onClick={handleUpdateResume}>Update resume</Button>
         </div>
     </div>
   );
