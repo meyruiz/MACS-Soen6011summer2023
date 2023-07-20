@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "https://7140-66-22-167-208.ngrok-free.app"
+const baseURL = "https://7bed-132-205-229-146.ngrok-free.app"
 // const baseURL = ""
 
 class ApiFun {
@@ -10,6 +10,10 @@ class ApiFun {
 
     static getApi(url){
         return axios.get(baseURL + url);   
+    }
+
+    static putApi(url){
+        return axios.put(baseURL + url);   
     }
 }
 
