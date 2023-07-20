@@ -69,6 +69,8 @@ The documentation is available on [here](https://github.com/meyruiz/MACS-Soen601
  * [Task Breakdown](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki/Project-Task-Assignment-and-Breakdown)
  * [Sprint 2 Open Issues and Plan](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki/Open-issues-or-plan-for-next-Sprint#sprint-2-plan)
 
+[Sprint 2](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki#sprint2)
+
 ## Backend Environment Setup
 **MongoDB Docker Setup**
 ```
