@@ -285,7 +285,7 @@ class Status():
 
 class Resume():
 
-    def __init__(self, first_name: str, last_name: str, email: str, phone: str = None, education: list[dict] = None, skills: list[str] = None, experience: list[dict] = None, file: dict = None, _id: str = None):
+    def __init__(self, first_name: str, last_name: str, email: str, phone: str = None, education: list[dict] = None, skills: list[str] = None, experience: list[dict] = None, file: dict = None, _id: str = None, candidate_id: str = None):
         # initialize the common attributes of the resume object
         self.first_name = first_name
         self.last_name = last_name
@@ -295,12 +295,22 @@ class Resume():
         self.skills = skills
         self.experience = experience
         self.file = file
+        self.candidate_id = candidate_id
         self._id = uuid.uuid4().hex if _id is None else _id
 
     @classmethod
     def get_by_id(cls, _id):
         # find a resume document by its ID in the database
         data = mongo.db.resumes.find_one({"_id": _id})
+        if data is not None:
+            return data
+        return None
+    
+    @classmethod
+    def get_by_candidate_id(cls, candidate_id):
+        # find a resume document by its ID in the database
+        data = mongo.db.resumes.find_one({"candidate_id": candidate_id})
+        
         if data is not None:
             return data
         return None
@@ -324,10 +334,10 @@ class Resume():
             "skills": self.skills,
             "experience": self.experience,
             "file": self.file,
+            "candidate_id": self.candidate_id,
             "_id": self._id
         }
 
     def save_to_mongo(self):
         # insert a resume document into the database using the json method
         mongo.db.resumes.insert_one(self.json())
-
