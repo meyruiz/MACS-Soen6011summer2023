@@ -5,6 +5,7 @@ from flask_login import UserMixin
 from .extensions import bcrypt
 from flask import session
 from datetime import datetime
+import json
 
 
 class User(UserMixin):
@@ -51,6 +52,8 @@ class User(UserMixin):
             new_user = cls(email, password, role)
             new_user.save_to_mongo()
             session['email'] = email
+            if role.lower() == "candidate":
+                Candidate(email=email, password=password, role=role, _id=new_user._id).save_to_mongo()
             return True
         else:
             return False
@@ -130,11 +133,26 @@ class JobPosting():
 
 class Candidate(User):
 
-    def __init__(self, email: str, password: str, role: str, first_name: str, last_name: str, resume_id: str, _id=None):
+    def __init__(self, email: str, password: str, role: str, first_name: str = None, 
+                 last_name: str = None, phone_number: str = None, description: str = None, 
+                 location: str = None, skills: str = None, previous_experience: str = None, 
+                 resume_id: str = None, _id = None):
         super().__init__(email, password, role, _id)
         self.first_name = first_name
         self.last_name = last_name
+        self.phone_number = phone_number
+        self.description = description
+        self.location = location
+        self.skills = skills
+        self.previous_experience = previous_experience
         self.resume_id = resume_id
+
+    @classmethod
+    def get_by_id(cls, _id):
+        data = mongo.db.candidate.find_one({"_id": _id})
+        if data is not None:
+            return cls(**data)
+        return None
 
     def apply_to_job(self, job_id):
         # check if the job exists
@@ -149,7 +167,6 @@ class Candidate(User):
         application = {
             "candidate_id": self._id,
             "job_id": job_id,
-            "resume_id": self.resume_id,
             "status": "pending",
             "application_date": datetime.now()
         }
@@ -166,6 +183,25 @@ class Candidate(User):
             job = JobPosting.get_jobBYJobId(app["job_id"])
             jobs.append(job)
         return jobs
+    
+    def json(self):
+        return {
+            "email": self.email,
+            "_id": self._id,
+            "password": self.password,
+            "role": self.role,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "phone_number": self.phone_number,
+            "description": self.description,
+            "location": self.location,
+            "skills": self.skills,
+            "previous_experience": self.previous_experience,
+            "resume_id": self.resume_id
+        }
+
+    def save_to_mongo(self):
+        mongo.db.candidate.insert_one(self.json())
 
 
 class Application():
@@ -178,8 +214,9 @@ class Application():
         self._id = uuid.uuid4().hex if _id is None else _id
 
         # validate the status value
-        if not Status.is_valid(self.status):
-            raise ValueError(f"Invalid status value: {self.status}")
+        # commented by@elsavid todo, my code would not work with these lines 
+        # if not Status.is_valid(self.status):
+        #     raise ValueError(f"Invalid status value: {self.status}")
 
     @classmethod
     def get_by_id(cls, _id):
@@ -250,9 +287,10 @@ class Status():
 
 class Resume():
 
-    def __init__(self, name: str, email: str, phone: str, education: list[dict], skills: list[str], experience: list[dict], file: dict, _id: str = None):
+    def __init__(self, first_name: str, last_name: str, email: str, phone: str = None, education: list[dict] = None, skills: list[str] = None, experience: list[dict] = None, file: dict = None, _id: str = None):
         # initialize the common attributes of the resume object
-        self.name = name
+        self.first_name = first_name
+        self.last_name = last_name
         self.email = email
         self.phone = phone
         self.education = education
@@ -280,12 +318,14 @@ class Resume():
     def json(self):
         # return a dictionary representation of the dynamic resume object
         return {
-            "name": self.name,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
             "email": self.email,
             "phone": self.phone,
             "education": self.education,
             "skills": self.skills,
             "experience": self.experience,
+            "file": self.file,
             "_id": self._id
         }
 
