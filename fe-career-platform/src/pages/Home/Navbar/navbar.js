@@ -16,7 +16,7 @@ export default function Navbar() {
   };
 
   const handleProfile = () => {
-    window.location.href = "/candidate/profile";
+    window.location.href = "/profile";
   }
 
   const handleLogout = () => {
