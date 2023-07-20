@@ -1,12 +1,10 @@
-h1 {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-}
-
-.profile-page {
+.resume-container {
     display: flex;
     flex-direction: column;
     padding: 20px;
     width: 50%;
+
+    .textfield {
+        margin: 10px 0;
+    }
 }
