@@ -52,9 +52,9 @@ class User(UserMixin):
             new_user = cls(email, password, role)
             new_user.save_to_mongo()
             session['email'] = email
+            if role.lower() == "candidate":
+                Candidate(email=email, password=password, role=role, _id=new_user._id).save_to_mongo()
             return True
-        elif role.lower() == "candidate":
-            Candidate(email=email, password=password, role=role).save_to_mongo()
         else:
             return False
 
