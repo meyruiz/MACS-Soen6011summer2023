@@ -191,6 +191,7 @@ def create_resume(candidate_id):
 
     data = {key: value for key, value in data.items() if hasattr(resume, key)}
     data["file"] = resume_file_data
+    data["candidate_id"] = candidate_id
     # create a new resume object with the data
     resume = Resume(**data)
 
@@ -211,3 +212,29 @@ def create_resume(candidate_id):
 
     # return the candidate data as JSON with status code 201
     return jsonify(resume.json()), 201
+
+
+@candidate.route('/candidate/<candidate_id>/resume', methods=['GET'])
+# @login_required
+def get_resume(candidate_id):
+    # get the candidate object by id
+    resume = Resume.get_by_candidate_id(candidate_id)
+    # check if the candidate object exists
+    if not resume:
+        # return a 404 not found error
+        abort(404, "Candidate not found")
+    # return the candidate data as JSON with status code 200
+    return jsonify(resume), 200
+
+
+@candidate.route('/candidate/resume/<resume_id>', methods=['GET'])
+# @login_required
+def get_resume_by_id(resume_id):
+    # get the candidate object by id
+    resume = Resume.get_by_id(resume_id)
+    # check if the candidate object exists
+    if not resume:
+        # return a 404 not found error
+        abort(404, "Candidate not found")
+    # return the candidate data as JSON with status code 200
+    return jsonify(resume), 200
