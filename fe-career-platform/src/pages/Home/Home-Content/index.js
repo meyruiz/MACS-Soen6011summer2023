@@ -2,37 +2,18 @@ import { Button, Card, CardActions, CardContent, Link, Typography } from '@mui/m
 import React, { Component, useEffect, useState } from 'react'
 import ApiFun from '../../../Service/api';
 
-const fakerData = [
-    {
-        postingId: 'asdasdasdasdasdasd',
-        companyName: 'Google Inc',
-        title: 'Full Stack Developer',
-        location: 'remote',
-        salary: '100~150K',
-        skillSets: ['Web progarmming', '10+ Working experience'],
-        description: "ahjsoidljaoilsjdoliasjdliajsdljasldjaljdslkjadlkajslkdjlaksjdlkajdslkjalkdjsalkdjlakjdlkajdslkjalkdjlskajdlkajdlkajdlkjalkjd"
-    },
-    {
-        postingId: 'asdasdkajshdkajhsdkjhaskjdhkajshdkj',
-        companyName: 'Faker Inc',
-        title: 'Full Stack Developer',
-        location: 'remote',
-        salary: '100~150K',
-        skillSets: ['Web progarmming', '10+ Working experience'],
-        description: "ahjsoidljaoilsjdoliasjdliajsdljasldjaljdslkjadlkajslkdjlaksjdlkajdslkjalkdjsalkdjlakjdlkajdslkjalkdjlskajdlkajdlkajdlkjalkjd"
-    },
-]
-
 export default function HomeContent() {
     const [isStudent, setIsStudent] = useState(false);
     const [allAvailableJobs, setallAvailableJobs] = useState([])
     useEffect(() => {
-        const loggedInUserID = localStorage.getItem("userid");
-        console.log(loggedInUserID);
+        const candidateId = localStorage.getItem("userid");
+        // console.log(loggedInUserID);
 
         // check if the user is Candidate
         const role = localStorage.getItem('userRole')
-        if(role === 'Candidate') {
+        // console.log(role.toLowerCase())
+        if(role && role.toLowerCase()  === 'candidate') {
+            // console.log(role)
             setIsStudent(true)
         }
 
@@ -46,14 +27,34 @@ export default function HomeContent() {
                 console.error(err)
             });
         
-        // get the
+        const tempList = [];
+        if(candidateId && isStudent) {
+            // get the all applied jobs
+            ApiFun.getApi(`/candidate/${candidateId}/jobs`).then((e) => {
+                console.log(e)
+                // e.data.map((data) => {
+                //     console.log(data._id)
+                //     tempList.push(data._id)
+                // })
+            })
+            setAppliedJobs([...appliedJobs, ...tempList])
+        }
+        
+        
     },[])
 
     const [appliedJobs, setAppliedJobs] = useState([])
     const handleApply = (jobID) => {
         setAppliedJobs([...appliedJobs, jobID])
         // console.log("handleApply -- ",jobId)
-        // ApiFun.postApi("/candidate/apply/<job_id>")
+        
+        const candidateID = localStorage.getItem('userid');
+        const url = `candidate/${candidateID}/apply/${jobID}`
+        ApiFun.postApi(url).then((e) => {
+            console.log(e);
+        }).catch((err)=>{
+            console.log(err);
+        })
         
     }
 
