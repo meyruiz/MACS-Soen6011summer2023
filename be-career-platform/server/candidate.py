@@ -61,7 +61,7 @@ def create_profile():
     return jsonify(candidate.json()), 201
 
 
-@candidate.route('/candidate/profile/<candidate_id>', methods=['PUT'])
+@candidate.route('/candidate/profile/<candidate_id>', methods=['POST'])
 # @login_required
 def update_profile(candidate_id):
     # check if the candidate_id is valid
@@ -118,7 +118,7 @@ def apply(job_id, candidate_id):
         abort(404, "Candidate not found")
     
     # try to apply to the job with the given id
-    result = candidate.apply_to_job(ObjectId(job_id))
+    result = candidate.apply_to_job(job_id)
     if result:
         # create a custom response with a success message and status code 200
         response = jsonify({"message": "You have successfully applied to the job."})

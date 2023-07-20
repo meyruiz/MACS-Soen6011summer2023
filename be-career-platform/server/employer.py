@@ -33,6 +33,7 @@ def profile():
 def postJob(employerId):
     #todo authentication
     try:
+        print(request.json)
         jobTitle = request.json["jobTitle"]
         jobDescription = request.json["jobDescription"]
         companyName = request.json["companyName"]
