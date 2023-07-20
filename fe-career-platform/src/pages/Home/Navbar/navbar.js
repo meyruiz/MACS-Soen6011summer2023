@@ -15,6 +15,10 @@ export default function Navbar() {
     setAnchorEl(null);
   };
 
+  const handleProfile = () => {
+    window.location.href = "/candidate/profile";
+  }
+
   const handleLogout = () => {
     setUser(false);
     setIsEmployer(false);
@@ -112,7 +116,9 @@ export default function Navbar() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                {!isEmployer && 
+                  <MenuItem onClick={handleProfile}>Profile</MenuItem> 
+                }
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </div>
