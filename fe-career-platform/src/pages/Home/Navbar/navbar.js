@@ -19,6 +19,10 @@ export default function Navbar() {
     window.location.href = "/profile";
   }
 
+  const handleApplicationsPage = () => {
+    window.location.href = "/candidate/applications";
+  }
+
   const handleLogout = () => {
     setUser(false);
     setIsEmployer(false);
@@ -118,6 +122,9 @@ export default function Navbar() {
               >
                 {!isEmployer && 
                   <MenuItem onClick={handleProfile}>Profile</MenuItem> 
+                }
+                {!isEmployer && 
+                  <MenuItem onClick={handleApplicationsPage}>Applications</MenuItem> 
                 }
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>

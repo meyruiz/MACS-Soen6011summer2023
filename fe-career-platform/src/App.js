@@ -4,6 +4,7 @@ import Signup from './pages/Signup/Signup';
 import Login from './pages/Login/Login';
 import Home from './pages/Home';
 import Profile from './pages/Profile/Profile';
+import CandidateApplications from './pages/CandidateApplications/CandidateApplications';
 import JobPosting from './pages/JobPosting/JobPosting';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/candidate/applications" element={<CandidateApplications />} />
             <Route path="/employer/jobposting" element={<JobPosting />} />
             {/* <Route path="/employer/createJobPosting" element={<CreateJobPosting />} /> */}
           </Routes>
