@@ -21,7 +21,11 @@ export default function Profile() {
     const handleFileChange = (event) => {
         const selectedFile = event.target.files[0];
 
-        const reader = new FileReader();
+        if(selectedFile.size > 1048576){
+            alert("File is too big! Try adding a new file less than 1MB");
+            setSelectedFile('');
+         } else {
+            const reader = new FileReader();
             reader.onloadend = (event) => {
                 const base64String = event.target.result;
                 setPdf(base64String);
@@ -29,6 +33,7 @@ export default function Profile() {
                 console.log(base64String);
             };
             reader.readAsDataURL(selectedFile);
+        }
     };
 
     const handleUpdateResume = (event) => {
@@ -37,7 +42,7 @@ export default function Profile() {
 
         ApiFun.postApi(`/candidate/${candidate_id}/resume`, resumeForm)
             .then((res=> {
-                //window.location.reload();
+                window.location.reload();
                 console.log(res);
             }))
             .catch((err) => {
@@ -100,14 +105,14 @@ export default function Profile() {
             setPreviousExperience(res.data.previous_experience);
             setSkills(res.data.skills);
             setResumeId(res.data.resume_id);
-        });
 
-        if (resume_id !== '') {
-            ApiFun.getApi(`/candidate/resume/${resume_id}`).then((res) => {
-                console.log(res.data);
-                setPdf(res.data.file.pdf);
-            });
-        }
+            if (res.data.resume_id !== null) {
+                ApiFun.getApi(`/candidate/resume/${res.data.resume_id}`).then((res) => {
+                    console.log(res.data);
+                    setPdf(res.data.file.pdf);
+                });
+            }
+        });
     
     },[resume_id])
 

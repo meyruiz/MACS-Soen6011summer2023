@@ -24,7 +24,7 @@ export default function Navbar() {
     setIsEmployer(false);
     localStorage.clear();
     window.location.href = '/'
-    window.location.reload();
+    //window.location.reload();
   }
 
   const userEmail = () => {
