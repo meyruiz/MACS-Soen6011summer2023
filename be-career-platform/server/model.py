@@ -149,7 +149,7 @@ class Candidate(User):
 
     @classmethod
     def get_by_id(cls, _id):
-        data = mongo.db.candidate.find_one({"_id": _id})
+        data = mongo.db.users.find_one({"_id": _id})
         if data is not None:
             return cls(**data)
         return None
@@ -175,7 +175,8 @@ class Candidate(User):
             "candidate_id": self._id,
             "job_id": job_id,
             "status": "pending",
-            "application_date": datetime.now()
+            "application_date": datetime.now(),
+            "_id": uuid.uuid4().hex
         }
         # insert the application into the database
         mongo.db.applications.insert_one(application)
@@ -219,6 +220,7 @@ class Application():
         self.status = status
         self.application_date = application_date
         self._id = uuid.uuid4().hex if _id is None else _id
+        # this construction is useless when creating an new application because you dont call it  
 
         # validate the status value
         # commented by@elsavid todo, my code would not work with these lines 
@@ -228,9 +230,10 @@ class Application():
     @classmethod
     def get_by_id(cls, _id):
         data = mongo.db.applications.find_one({"_id": _id})
-        if data is not None:
-            return cls(**data)
-        return None
+        return data
+        # if data is not None:
+        #     return cls(**data)
+        # return None
 
     @classmethod
     def get_by_candidate_id(cls, candidate_id):
