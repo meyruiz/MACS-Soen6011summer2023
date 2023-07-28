@@ -70,11 +70,12 @@ class User(UserMixin):
         mongo.db.users.insert_one(self.json())
 
 class JobPosting():
-    def __init__(self, employerId, jobTitle, jobDescription, companyName, _id=None):
+    def __init__(self, employerId, jobTitle, jobDescription, companyName,skillSets,_id=None):
         self.employerId = employerId
         self.jobTitle = jobTitle
         self.jobDescription = jobDescription
         self.companyName = companyName
+        self.skillSets = skillSets
         self._id = uuid.uuid4().hex if _id is None else _id
 
     # def is_authenticated(self):
@@ -124,6 +125,7 @@ class JobPosting():
             "jobTitle": self.jobTitle,
             "jobDescription": self.jobDescription,
             "companyName":self.companyName,
+            "skillSets":self.skillSets,
             "creation_date": datetime.now()
         }
 
