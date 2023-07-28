@@ -155,5 +155,40 @@ def findAllCandidatesForOneJob(employer_id, job_id):
 def getApplicationByApplicationId(application_id):
     #todo authentication
 
-    application = Application.get_by_id(application_id)
-    return jsonify(str(application)), 200
+    application = mongo.db.applications.find_one({"_id":application_id})
+    return jsonify(application), 200
+
+@employer.route('/employer/applications/job/<job_id>', methods=['GET'])
+def getApplicationsByJobId(job_id):
+    try:
+        applications = mongo.db.applications.find({'job_id':job_id})
+        records = list(applications)
+        job = JobPosting.get_jobBYJobId(job_id)
+        response = {}
+        response["jobInformation"] = job
+        response["numberOfApplications"] = len(records)
+        return jsonify(response) , 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
+
+@employer.route('/employer/<employer_id>/applications/all', methods=['GET'])
+def findAllApplicationsByEmployerId(employer_id):
+    # try: 
+    jobs = JobPosting.get_jobListsBYEmployerId(employer_id)
+    records = list(jobs)
+    jobs = [record  for record in records]
+    response = []
+    for job in jobs:
+        print(str(job))
+        jobID = job["_id"]
+        print(jobID+"dd")
+        applications = mongo.db.applications.find({'job_id':jobID})
+        record = {}
+        record.update({
+            "jobInformation": job,
+            "numberOfApplications":len(list(applications))
+        })
+        response.append(record)
+    return jsonify(response) , 200
+    # except Exception as e:
+    #     return jsonify({'error': str(e)}), 400
