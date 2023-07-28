@@ -230,10 +230,9 @@ class Application():
     @classmethod
     def get_by_id(cls, _id):
         data = mongo.db.applications.find_one({"_id": _id})
-        return data
-        # if data is not None:
-        #     return cls(**data)
-        # return None
+        if data is not None:
+            return cls(**data)
+        return None
 
     @classmethod
     def get_by_candidate_id(cls, candidate_id):
