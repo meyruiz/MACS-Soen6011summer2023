@@ -25,7 +25,7 @@ def index():
 @admin.route('/admin/candidates', methods=['GET'])
 def findAllCandidates():
     if notAdminRole():
-        abort(403, "You are not a admin.")
+        return jsonify(status=403, msg="You are not an admin.")
     data = Candidate.get_all()
     candidates = []
     for x in data:
