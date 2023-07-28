@@ -106,7 +106,7 @@ def update_profile(candidate_id):
 
 @candidate.route('/candidate/<candidate_id>/apply/<job_id>', methods=['POST'])
 # @login_required
-def apply(job_id, candidate_id):
+def apply(candidate_id, job_id):
     # check if the candidate_id is valid
     if not candidate_id:
         return "No candidate id provided", 400
