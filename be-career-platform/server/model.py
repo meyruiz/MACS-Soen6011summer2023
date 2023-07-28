@@ -175,7 +175,8 @@ class Candidate(User):
             "candidate_id": self._id,
             "job_id": job_id,
             "status": "pending",
-            "application_date": datetime.now()
+            "application_date": datetime.now(),
+            "_id": uuid.uuid4().hex
         }
         # insert the application into the database
         mongo.db.applications.insert_one(application)
@@ -219,6 +220,7 @@ class Application():
         self.status = status
         self.application_date = application_date
         self._id = uuid.uuid4().hex if _id is None else _id
+        # this construction is useless when creating an new application because you dont call it  
 
         # validate the status value
         # commented by@elsavid todo, my code would not work with these lines 
@@ -251,9 +253,9 @@ class Application():
         filter = {"_id": _id}
         update = {"$set": {"status": new_status}}
 
-        # validate the new status value
-        if not Status.is_valid(new_status):
-            raise ValueError(f"Invalid status value: {new_status}")
+        # # validate the new status value
+        # if not Status.is_valid(new_status):
+        #     raise ValueError(f"Invalid status value: {new_status}")
         
         result = mongo.db.applications.update_one(filter, update)
         return result
