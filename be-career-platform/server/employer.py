@@ -150,3 +150,10 @@ def findAllCandidatesForOneJob(employer_id, job_id):
             "application_date": x.application_date,
         })
     return jsonify(status=200, result=apps)
+
+@employer.route('/application/<application_id>', methods=['GET'])
+def getApplicationByApplicationId(application_id):
+    #todo authentication
+
+    application = Application.get_by_id(application_id)
+    return jsonify(str(application)), 200
