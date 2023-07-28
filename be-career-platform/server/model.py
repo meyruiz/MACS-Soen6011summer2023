@@ -149,7 +149,7 @@ class Candidate(User):
 
     @classmethod
     def get_by_id(cls, _id):
-        data = mongo.db.users.find_one({"_id": _id})
+        data = mongo.db.candidate.find_one({"_id": _id})
         if data is not None:
             return cls(**data)
         return None
