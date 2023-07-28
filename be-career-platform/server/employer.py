@@ -38,7 +38,9 @@ def postJob(employerId):
         jobTitle = request.json["jobTitle"]
         jobDescription = request.json["jobDescription"]
         companyName = request.json["companyName"]
-        job = JobPosting(employerId,jobTitle,jobDescription,companyName)
+        skillSets = request.json["skillSets"]
+        skillSets = list(skillSets)
+        job = JobPosting(employerId,jobTitle,jobDescription,companyName,skillSets)
         job.save_to_mongo()
         flash(f'Job created for {jobTitle}!', 'success')
         return {"jobId": job.get_jobId()}, 201
@@ -71,7 +73,7 @@ def updateJob(employer_id,job_id):
     #     flash('Not logined', 'danger')
     #     return "failed authentication"
     try: 
-        fields = ["jobTitle","jobDescription","companyName"]
+        fields = ["jobTitle","jobDescription","companyName","skillSets"]
         updateInfo = {}
         json_keys = list(request.json.keys()) if request.is_json else []
         
@@ -121,8 +123,8 @@ def changeApplicationStatusByEmployer(application_id):
 @employer.route('/employer/<employer_id>/jobs/<job_id>/candidates', methods=['GET'])
 # @login_required
 def findAllCandidatesForOneJob(employer_id, job_id):
-    if notEmployerRole():
-        return jsonify(status=403, msg="You are not an employer.")
+    # if notEmployerRole():
+    #     return jsonify(status=403, msg="You are not an employer.")
     # current_user_id = current_user.get_id()
     current_user_id = employer_id
     job = JobPosting.get_jobBYJobId(job_id)
