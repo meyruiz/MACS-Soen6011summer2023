@@ -3,6 +3,7 @@ from flask import Blueprint,request, flash, jsonify
 from flask_login import login_required, current_user
 from .model import User, JobPosting, Application, Candidate
 from bson import json_util
+from urllib.parse import parse_qs
 import json
 
 employer = Blueprint('employer', __name__)
@@ -102,7 +103,22 @@ def deleteJob(employer_id,job_id):
 def findAllJobs():
     #todo do authentication
     try:
-        records = list(JobPosting.get_allJobs())
+        query_string = request.query_string
+        parsed_query = parse_qs(query_string)
+        print(parsed_query)
+        filter_query = {}
+        for param, values in parsed_query.items():
+            param = param.decode("utf-8")
+            if len(values) == 1:
+                value = values[0].decode("utf-8")
+                filter_query[param] = value
+        
+            else:
+                values_str = [value.decode("utf-8") for value in values]
+                filter_query[param] = {"$all": values_str}
+        print(filter_query)
+        jobs = mongo.db.jobs.find(filter_query)
+        records = list(jobs)
         records_list = [record for record in records]
         return jsonify(records_list) , 200
     except Exception as e:
