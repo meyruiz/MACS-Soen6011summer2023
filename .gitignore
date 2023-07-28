@@ -4,3 +4,4 @@ be-career-platform/venv/
 be-career-platform/server/__pycache__/
 be-career-platform/tests/__pycache__/
 .venv
+venv
