@@ -154,6 +154,13 @@ class Candidate(User):
             return cls(**data)
         return None
 
+    @classmethod
+    def get_all(cls):
+        data = mongo.db.candidate.find()
+        if data is not None:
+            return [cls(**candidate) for candidate in data]
+        return []
+
     def apply_to_job(self, job_id):
         # check if the job exists
         job = JobPosting.get_jobBYJobId(job_id)
