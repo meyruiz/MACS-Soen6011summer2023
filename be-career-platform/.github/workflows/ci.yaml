@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, backend/paullmq8 ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, backend/paullmq8 ]
 
 jobs:
   run-tests:
