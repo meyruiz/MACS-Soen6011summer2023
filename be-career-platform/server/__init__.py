@@ -4,6 +4,7 @@ from .extensions import mongo, bcrypt, cors
 from .auth import auth as auth_blueprint
 from .candidate import candidate as candidate_blueprint
 from .employer import employer as employer_blueprint
+from .admin import admin as admin_blueprint
 from .model import User
 
 
@@ -33,5 +34,6 @@ def create_app(config_object="server.settings"):
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(candidate_blueprint)
     app.register_blueprint(employer_blueprint)
+    app.register_blueprint(admin_blueprint)
 
     return app
