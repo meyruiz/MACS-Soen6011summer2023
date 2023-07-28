@@ -251,9 +251,9 @@ class Application():
         filter = {"_id": _id}
         update = {"$set": {"status": new_status}}
 
-        # validate the new status value
-        if not Status.is_valid(new_status):
-            raise ValueError(f"Invalid status value: {new_status}")
+        # # validate the new status value
+        # if not Status.is_valid(new_status):
+        #     raise ValueError(f"Invalid status value: {new_status}")
         
         result = mongo.db.applications.update_one(filter, update)
         return result
