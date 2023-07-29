@@ -8,23 +8,24 @@ export default function CandidateApplications() {
     const [appliedJobs, setAppliedJobs] = useState([])
 
     useEffect(() => {
-        const candidateId = localStorage.getItem("userid");
+        const role = localStorage.getItem('userRole');
+        let candidate_id;
 
-        // check if the user is Candidate
-        const role = localStorage.getItem('userRole')
-        // console.log(role.toLowerCase())
-        if(role && role.toLowerCase()  === 'candidate') {
-            // console.log(role)
-            setIsStudent(true)
+        if(role && role.toLowerCase()  === 'admin') {
+            candidate_id = localStorage.getItem('adminCandidateId');
+        } else {
+            candidate_id = localStorage.getItem('userid');
         }
 
         // render all applications that the candidate has applied to
-        if(candidateId && isStudent) {
-            ApiFun.getApi(`/candidate/${candidateId}/jobs`).then((res) => {
+        if(candidate_id) {
+            ApiFun.getApi(`/candidate/${candidate_id}/jobs`).then((res) => {
                 // console.log(res.data);
-                res.data[0].status = "Accepted";
-                res.data[1].status = "Pending";
-                res.data[2].status = "Rejected";
+                if (res.data) {
+                    res.data[0].status = "Accepted";
+                    // res.data[1].status = "Pending";
+                    // res.data[2].status = "Rejected";
+                }
 
                 console.log(res.data);
                 setAppliedJobs([...res.data])
@@ -34,7 +35,7 @@ export default function CandidateApplications() {
             });
         }
         
-    },[isStudent])
+    },[])
 
     return (
         <div>
@@ -65,13 +66,13 @@ export default function CandidateApplications() {
                             Job Description: {job.jobDescription}
                         </Typography>
                     </CardContent>
-                    {isStudent && (
-                        <Button variant="contained" 
-                            color={job.status === "Accepted" ? "success" : job.status === "Pending" ? "warning" : "error"}
-                            >
-                            {job.status}
-                        </Button>
-                    )}
+                    
+                    <Button variant="contained" 
+                        color={job.status === "Accepted" ? "success" : job.status === "Pending" ? "warning" : "error"}
+                        >
+                        {job.status}
+                    </Button>
+                    
                 </Card>
             )))}
         </h1>
