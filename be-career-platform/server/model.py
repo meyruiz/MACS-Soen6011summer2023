@@ -194,6 +194,16 @@ class Candidate(User):
             jobs.append(job)
         return jobs
     
+    def get_applications_by_candidate(self):
+        # find all the applications by the candidate
+        applications = mongo.db.applications.find({"candidate_id": self._id})
+        return applications
+    
+    def get_application(self, application_id):
+        # find all the applications by the candidate
+        application = mongo.db.applications.find_one({"_id": application_id})
+        return application
+    
     def json(self):
         return {
             "email": self.email,
