@@ -2,7 +2,7 @@ import json
 from .extensions import mongo
 from flask import Blueprint, jsonify, request, abort
 from flask_login import login_required, current_user
-from .model import JobPosting, Resume, User, Candidate
+from .model import JobPosting, Resume, User, Candidate, Application
 from pymongo import ReturnDocument
 from bson.objectid import ObjectId
 from bson.json_util import dumps
@@ -236,5 +236,34 @@ def get_resume_by_id(resume_id):
     if not resume:
         # return a 404 not found error
         abort(404, "Candidate not found")
-    # return the candidate data as JSON with status code 200
+    # return the resume data as JSON with status code 200
     return jsonify(resume), 200
+
+
+@candidate.route('/candidate/<candidate_id>/applications', methods=['GET'])
+# @login_required
+def get_candidate_applications(candidate_id):
+    # check if the candidate_id is valid
+    if not candidate_id:
+        return "No candidate id provided", 400
+
+    # get applications
+    applications = Candidate.get_applications_by_candidate(candidate_id)
+
+    # return the jobs as JSON with status code 200
+    applications = [json.loads(dumps(application)) for application in applications]
+    return jsonify(applications)
+
+
+@candidate.route('/candidate/applications/<application_id>', methods=['GET'])
+# @login_required
+def get_candidate_application(application_id):
+
+    application = Candidate.get_application(application_id)
+
+    if not application:
+        # return a 404 not found error
+        abort(404, "Application not found")
+    # return the application data as JSON with status code 200
+    return jsonify(json.loads(dumps(application))), 200
+

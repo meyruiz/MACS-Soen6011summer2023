@@ -191,17 +191,20 @@ class Candidate(User):
         jobs = []
         for app in applications:
             job = JobPosting.get_jobBYJobId(app["job_id"])
+            job["status"] = app["status"]
             jobs.append(job)
         return jobs
     
-    def get_applications_by_candidate(self):
+    @staticmethod
+    def get_applications_by_candidate(candidate_id):
         # find all the applications by the candidate
-        applications = mongo.db.applications.find({"candidate_id": self._id})
+        applications = mongo.db.applications.find({"candidate_id": candidate_id})
         return applications
     
-    def get_application(self, application_id):
+    @staticmethod
+    def get_application(application_id):
         # find all the applications by the candidate
-        application = mongo.db.applications.find_one({"_id": application_id})
+        application = mongo.db.applications.find({"_id": application_id})
         return application
     
     def json(self):
