@@ -269,6 +269,13 @@ class Application():
             return f"Deleted document with ID: {_id}"
         else:
             raise Exception(f"No application found with ID: {_id}")
+        
+    @classmethod
+    def application_count(cls, job_id):
+        applicationcount = mongo.db.applications.find({'job_id':job_id})
+        applications= list(applicationcount)
+        totalcount = len(applications)
+        return (totalcount)
 
     def json(self):
         return {
