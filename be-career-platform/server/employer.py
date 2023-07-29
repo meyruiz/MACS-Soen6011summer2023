@@ -152,21 +152,30 @@ def findAllCandidatesForOneJob(employer_id, job_id):
     apps = []
     for x in applications:
         can = Candidate.get_by_id(x.candidate_id)
-        apps.append({
-            "candidate": {
-                "email": can.email,
-                "first_name": can.first_name,
-                "last_name": can.last_name,
-                "phone_number": can.phone_number,
-                "description": can.description,
-                "location": can.location,
-                "skills": can.skills,
-                "previous_experience": can.previous_experience,
-            },
-            "job_id": x.job_id,
-            "status": x.status,
-            "application_date": x.application_date,
-        })
+        if can is None:
+            apps.append({
+                "candidate": None,
+                "job_id": x.job_id,
+                "status": x.status,
+                "application_date": x.application_date,
+            }) 
+        else:
+            apps.append({
+                "candidate": {
+                    "_id": x.candidate_id,
+                    "email": can.email,
+                    "first_name": can.first_name,
+                    "last_name": can.last_name,
+                    "phone_number": can.phone_number,
+                    "description": can.description,
+                    "location": can.location,
+                    "skills": can.skills,
+                    "previous_experience": can.previous_experience,
+                },
+                "job_id": x.job_id,
+                "status": x.status,
+                "application_date": x.application_date,
+            })
     return jsonify(status=200, result=apps)
 
 @employer.route('/application/<application_id>', methods=['GET'])
