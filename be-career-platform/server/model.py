@@ -207,6 +207,14 @@ class Candidate(User):
         application = mongo.db.applications.find({"_id": application_id})
         return application
     
+    @classmethod
+    def delete(cls, _id):
+        result = mongo.db.candidate.find_one_and_delete({"_id": _id})
+        if result:
+            return f"Deleted document with ID: {_id}"
+        else:
+            raise Exception(f"No application found with ID: {_id}")
+    
     def json(self):
         return {
             "email": self.email,
