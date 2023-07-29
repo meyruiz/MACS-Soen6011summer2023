@@ -267,3 +267,15 @@ def get_candidate_application(application_id):
     # return the application data as JSON with status code 200
     return jsonify(json.loads(dumps(application))), 200
 
+
+@candidate.route('/candidate/applications/<application_id>', methods=['DELETE'])
+# @login_required
+def delete_candidate_application(application_id):
+
+    application = Application.delete(application_id)
+
+    if not application:
+        # return a 404 not found error
+        abort(404, "Application not found")
+    # return the application data as JSON with status code 200
+    return jsonify(json.loads(dumps(application))), 200
