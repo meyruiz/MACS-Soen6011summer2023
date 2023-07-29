@@ -3,11 +3,13 @@ import Navbar from '../Home/Navbar/navbar';
 import ApiFun from '../../Service/api';
 import {  Button, Card, CardContent, TextField, Typography } from '@mui/material';
 import "./JobPosting.css"
+import JobPostingInterviewList from './JobPostingInterviewList/JobPostingInterviewList';
 
 export default function JobPosting() {
     const [companyName, setCompanyName] = React.useState('');
     const [jobTitle, setJobTitle] = React.useState('');
     const [jobDescription, setJobDescription] = React.useState('');
+    const [jobSkillSet, setjobSkillSet] = React.useState([]);
 
     const [openJobPostingSection, setopenJobPostingSection] = React.useState(false);
     const handleJobPostingSection = () => {
@@ -22,7 +24,7 @@ export default function JobPosting() {
         if(companyName === ''  || jobDescription === '' || jobTitle === '') {
             return;
         }
-        const from = {companyName, jobTitle, jobDescription}
+        const from = {companyName, jobTitle, jobDescription, skillSets: jobSkillSet}
         console.log(from);
 
         // clear the default messages
@@ -34,6 +36,7 @@ export default function JobPosting() {
         const employer_id = localStorage.getItem('userid');
         const URL = `/employer/post/${employer_id}`;
         console.log(URL);
+        console.log(from)
         ApiFun.postApi(URL, from)
             .then((res=> {
                 window.location.reload();
@@ -41,6 +44,7 @@ export default function JobPosting() {
             }))
             .catch((err) => {
                 console.error(err)
+                console.log(12312312);
             });
     }
 
@@ -49,6 +53,14 @@ export default function JobPosting() {
 
     // todo : remove job posting by id
     const handleRemove = (jobId) => {}
+
+    const handleJobSkillSet = (e) => {
+        const content = e.target.value;
+        const res = content.split(" ");
+        // console.log(res);
+        setjobSkillSet([...res])
+        // console.log("job", jobSkillSet);
+    }
 
     const [jobPostingData, setJobPostingData] = useState([])
     const [isEmployer, setIsEmployer] = useState(false)
@@ -63,7 +75,7 @@ export default function JobPosting() {
 
         const employer_id = localStorage.getItem('userid');
         ApiFun.getApi(`/employer/${employer_id}/jobs`).then((res) => {
-            // console.log(res.data);
+            console.log(res.data);
             setJobPostingData([...jobPostingData, ...res.data]);
             // console.log(jobPostingData)
         });
@@ -106,10 +118,20 @@ export default function JobPosting() {
 
                         <TextField
                             required
+                            label="Job Skillsets"
+                            multiline
+                            rows={4}
+                            onChange={handleJobSkillSet}/>
+
+                        
+                        <TextField
+                            required
                             label="Job Description"
                             multiline
                             rows={4}
                             onChange={(e)=> setJobDescription(e.target.value)}/>
+
+                        
                     </div>
                     
                     <div className='buttons'>
@@ -138,7 +160,7 @@ export default function JobPosting() {
                                 marginLeft: 5,
                                 
                                 width: 1700,
-                                height: 140
+                                height: 200
                             }}
                             key={job._id}
                             >
@@ -149,9 +171,26 @@ export default function JobPosting() {
                                     <Typography gutterBottom variant="h7" component="div">
                                         Job Title: {job.jobTitle}
                                     </Typography>
+                                    <Typography gutterBottom variant="h7" component="div">
+                                        Skill: 
+                                        <div className='skillsets'>
+                                            {
+                                                job.skillSets.map((skill) =>{
+                                                    return (
+                                                        
+                                                        <div>{skill}</div>
+                                        
+                                                    )
+                                                })
+                                            }
+                                        </div>
+                                     </Typography>
+                                    
+
                                     <Typography variant="body2" color="text.secondary">
                                         Job description: {job.jobDescription}
                                     </Typography>
+                                    <JobPostingInterviewList jobid={job._id}/>
                                     {/* <Typography gutterBottom variant="h5" component="div">
                                         Salary: {job.salary}
                                     </Typography>

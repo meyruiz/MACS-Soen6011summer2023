@@ -33,5 +33,11 @@
     justify-content: space-between;
 }
 
+.skillsets{
+    display: flex;
+    gap: 10px;
+    flex-direction: row;
+}
+
 
 
