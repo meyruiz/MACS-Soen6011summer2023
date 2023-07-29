@@ -272,10 +272,19 @@ def get_candidate_application(application_id):
 # @login_required
 def delete_candidate_application(application_id):
 
-    application = Application.delete(application_id)
+    try:
+        application = Application.delete(application_id)
+    except:
+        application = f"No application found with ID: {application_id}"
+    return jsonify(json.loads(dumps(application))), 200
 
-    if not application:
-        # return a 404 not found error
-        abort(404, "Application not found")
-    # return the application data as JSON with status code 200
+
+@candidate.route('/candidate/<candidate_id>', methods=['DELETE'])
+# @login_required
+def delete_candidate(candidate_id):
+
+    try:
+        application = Candidate.delete(candidate_id)
+    except:
+        application = f"No application found with ID: {candidate_id}"
     return jsonify(json.loads(dumps(application))), 200
