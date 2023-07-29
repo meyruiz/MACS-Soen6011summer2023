@@ -6,6 +6,8 @@ export default function Navbar() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [user, setUser] = React.useState(false);
   const [isEmployer, setIsEmployer] = React.useState(false);
+  const [isCandidate, setIsCandidate] = React.useState(false);
+  const [isAdmin, setIsAdmin] = React.useState(false);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -21,6 +23,10 @@ export default function Navbar() {
 
   const handleApplicationsPage = () => {
     window.location.href = "/candidate/applications";
+  }
+
+  const handleAdminEmployers = () => {
+    window.location.href = "/admin/candidates";
   }
 
   const handleLogout = () => {
@@ -46,10 +52,15 @@ export default function Navbar() {
     // console.log('loggedInUser -- ',loggedInUserID);
     // console.log('loggedInUser -- ',loggedInUserEmail);
     // console.log('loggedInUser -- ',loggedInUserRole);
+
     if (loggedInUserID && loggedInUserEmail && loggedInUserRole) {
       setUser(true);
       if(loggedInUserRole === "Employer"){
-        setIsEmployer(true)
+        setIsEmployer(true);
+      } else if (loggedInUserRole === "Candidate") {
+        setIsCandidate(true);
+      } else {
+        setIsAdmin(true);
       }
     }
   }, []);
@@ -120,11 +131,14 @@ export default function Navbar() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                {!isEmployer && 
+                {isCandidate && 
                   <MenuItem onClick={handleProfile}>Profile</MenuItem> 
                 }
-                {!isEmployer && 
+                {isCandidate && 
                   <MenuItem onClick={handleApplicationsPage}>Applications</MenuItem> 
+                }
+                {isAdmin && 
+                  <MenuItem onClick={handleAdminEmployers}>Candidates</MenuItem> 
                 }
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>

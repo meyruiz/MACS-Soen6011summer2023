@@ -37,7 +37,15 @@ export default function Profile() {
     };
 
     const handleUpdateResume = (event) => {
-        const candidate_id = localStorage.getItem('userid');
+        const role = localStorage.getItem('userRole');
+        let candidate_id = localStorage.getItem('userid');
+
+        if(role && role.toLowerCase()  === 'admin') {
+            candidate_id = localStorage.getItem('adminCandidateId');
+        } else {
+            candidate_id = localStorage.getItem('userid');
+        }
+
         const resumeForm = { pdf }
 
         ApiFun.postApi(`/candidate/${candidate_id}/resume`, resumeForm)
@@ -78,7 +86,15 @@ export default function Profile() {
         event.preventDefault();
         // call api to update profile
 
-        const candidate_id = localStorage.getItem('userid');
+        const role = localStorage.getItem('userRole');
+        let candidate_id = localStorage.getItem('userid');
+
+        if(role && role.toLowerCase()  === 'admin') {
+            candidate_id = localStorage.getItem('adminCandidateId');
+        } else {
+            candidate_id = localStorage.getItem('userid');
+        }
+
         const form = { first_name, last_name, location, description, email, phone_number, previous_experience, skills }
 
         console.log(form);
@@ -94,7 +110,15 @@ export default function Profile() {
     };
 
     useEffect(() => {
-        const candidate_id = localStorage.getItem('userid');
+        const role = localStorage.getItem('userRole');
+        let candidate_id = localStorage.getItem('userid');
+
+        if(role && role.toLowerCase()  === 'admin') {
+            candidate_id = localStorage.getItem('adminCandidateId');
+        } else {
+            candidate_id = localStorage.getItem('userid');
+        }
+
         ApiFun.getApi(`/candidate/profile/${candidate_id}`).then((res) => {
             setFirstName(res.data.first_name);
             setLastName(res.data.last_name);
