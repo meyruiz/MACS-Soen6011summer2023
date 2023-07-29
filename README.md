@@ -76,7 +76,12 @@ The documentation is available on [here](https://github.com/meyruiz/MACS-Soen601
 ```
 $docker pull mongo
 $docker run -d -p 27017:27017 -v {/your/local/directory}:/data/db --name mymongo mongo:latest
+
+
 $brew install mongosh
+or in linux 
+$docker exec -it mymongo mongosh
+
 $mongosh localhost:27017
 
 basic mongodb commands:
