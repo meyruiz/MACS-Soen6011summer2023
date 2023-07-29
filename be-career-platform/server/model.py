@@ -191,6 +191,8 @@ class Candidate(User):
         jobs = []
         for app in applications:
             job = JobPosting.get_jobBYJobId(app["job_id"])
+
+            # application status returned to applied job listing
             job["status"] = app["status"]
             jobs.append(job)
         return jobs
