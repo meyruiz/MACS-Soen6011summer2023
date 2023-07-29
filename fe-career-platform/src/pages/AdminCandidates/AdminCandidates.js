@@ -30,6 +30,14 @@ export default function AdminEmployers() {
         
     },[isAdmin])
 
+    const handleCandidateApplications = (id) => {
+        //event.preventDefault();
+        console.log("show candidate applications");
+        localStorage.setItem('adminCandidateId', id);
+
+        window.location.href = "/candidate/applications";
+    };
+
     const handleModifyCandidate = (id) => {
         //event.preventDefault();
         console.log("modify candidate");
@@ -39,9 +47,12 @@ export default function AdminEmployers() {
         window.location.href = "/profile";
     };
 
-    const handleEraseCandidate = (event) => {
+    const handleEraseCandidate = (id) => {
         // erase candidate
         console.log("erase candidate");
+        setCandidatesList(candidatesList.filter(candidate => candidate._id !== id));
+
+        // TODO: Call api to erase candidate
     };
 
     //localStorage.setItem('userid', e.data.id);
@@ -77,13 +88,19 @@ export default function AdminEmployers() {
                     </CardContent>
 
                         <Button variant="contained" style={{marginRight: "10px"}}
-                            color="success" onClick={() => handleModifyCandidate(job._id)}
+                            color="success" onClick={() => handleCandidateApplications(job._id)}
+                            >
+                            Applications
+                        </Button>
+
+                        <Button variant="contained" style={{marginRight: "10px"}}
+                            color="warning" onClick={() => handleModifyCandidate(job._id)}
                             >
                             Modify
                         </Button>
 
                         <Button variant="contained" 
-                            color="error" onClick={handleEraseCandidate}
+                            color="error" onClick={() => handleEraseCandidate(job._id)}
                             >
                             Erase
                         </Button>
