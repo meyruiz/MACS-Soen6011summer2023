@@ -1,12 +1,8 @@
-import json
-from .extensions import mongo
-from flask import Blueprint, jsonify, request, abort
-from flask_login import login_required, current_user
-from .model import JobPosting, Resume, User, Candidate
-from pymongo import ReturnDocument
-from bson.objectid import ObjectId
-from bson.json_util import dumps
 from urllib.parse import parse_qs
+from flask import Blueprint, jsonify, request
+from flask_login import login_required, current_user
+from .model import User, Candidate
+from .extensions import mongo
 
 admin = Blueprint('admin', __name__)
 
@@ -66,3 +62,13 @@ def queryAllUsers():
         return jsonify(response) , 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
+
+
+@admin.route('/admin/users', methods=['DELETE'])
+def deleteAccounts():
+    userIds = request.args.getlist("userIds")[0].split(",")
+    for id in userIds:
+        print(id)
+        print(type(id))
+        mongo.db.users.delete_one({'_id': id})
+    return jsonify(status=204)
