@@ -1,9 +1,10 @@
-import { Button, Card, CardActions, CardContent, Link, TextField, Typography } from '@mui/material';
+import { Button, Card, CardActions, CardContent, IconButton, Link, TextField, Typography } from '@mui/material';
 import React, { Component, useEffect, useState } from 'react'
 import ApiFun from '../../../Service/api';
 import Navbar from '../../Home/Navbar/navbar'
 import "./index.css"
 import JobPostingInterviewList from '../../JobPosting/JobPostingInterviewList/JobPostingInterviewList';
+
 
 export default function CandidateApplications() {
     const [isStudent, setIsStudent] = useState(false);
@@ -154,10 +155,56 @@ export default function CandidateApplications() {
                 console.log(12312312);
             });
     }
+    const [searchQuery, setSearchQuery] = useState('');
+    const [isSearch, setIsSearched] = useState(false)
+    const onHandleSearch = () => {
+        console.log('onHandleSearch', searchQuery);
+        setIsSearched(true)
+        ApiFun.getApi('/jobs/all?skillSets='+searchQuery).then((res) => {
+            console.log(res);
+            setallAvailableJobs([...res.data])
+        })
+        // setSearchQuery("")
+    }
+
+    const handleClearSearch = () => {
+        // setSearchQuery('')
+        setIsSearched(false)
+        window.location.reload()
+    }
 
 
     return (
         <div>
+            {isStudent && (
+               <form className='search'>
+                <TextField
+                    id="search-bar"
+                    className="text"
+                    onInput={(e) => {
+                    setSearchQuery(e.target.value);
+                    }}
+                    
+                    variant="outlined"
+                    placeholder="Search..."
+                    size="large"
+                />
+                <div className="btn-search">
+                    <Button 
+                            variant="contained"
+                            onClick={onHandleSearch}>
+                            Search
+                    </Button>
+                </div>
+                
+                
+                {isSearch && (
+                    <Button onClick={handleClearSearch}>
+                            Clear
+                    </Button>
+                )}
+             </form>
+            )}
             {
                 openEditSection ? (
                     <form>
