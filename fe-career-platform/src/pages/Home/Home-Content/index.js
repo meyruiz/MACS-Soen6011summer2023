@@ -1,12 +1,17 @@
-import { Button, Card, CardActions, CardContent, Link, Typography } from '@mui/material';
+import { Button, Card, CardActions, CardContent, Link, TextField, Typography } from '@mui/material';
 import React, { Component, useEffect, useState } from 'react'
 import ApiFun from '../../../Service/api';
 import Navbar from '../../Home/Navbar/navbar'
+import "./index.css"
+import JobPostingInterviewList from '../../JobPosting/JobPostingInterviewList/JobPostingInterviewList';
 
 export default function CandidateApplications() {
     const [isStudent, setIsStudent] = useState(false);
     const [allAvailableJobs, setallAvailableJobs] = useState([])
     const [allJobsFetched, setAllJobsFetched] = useState(false);
+
+
+    const [isAdmin, setIsAdmin] = useState(false);
 
     // Fetch all available jobs when the page loads
     useEffect(() => {
@@ -15,8 +20,13 @@ export default function CandidateApplications() {
             setIsStudent(true)
         }
 
+        if(role && role.toLowerCase()  === 'admin') {
+            setIsAdmin(true)
+        }
+
         ApiFun.getApi("/jobs/all")
             .then((res=> {
+                console.log(res.data)
                 setallAvailableJobs(res.data)
                 setAllJobsFetched(true);
             }))
@@ -61,43 +71,229 @@ export default function CandidateApplications() {
         })
     }
 
+   
+
+    const adminHandleRemoveJob= (jobID) => {
+        setallAvailableJobs(allAvailableJobs.filter(job => job._id !== jobID));
+        const admin_id = localStorage.getItem("userid");
+        ApiFun.deleteApi(`/employer/${admin_id}/${jobID}`).then((e) => {
+            console.log(e)}
+        ).then((err) => {
+            console.log(err);
+        });
+    }
+
+    const [openEditSection, closeEditSection] = useState(false)
+    const adminHandleEditSection = (jobID, empolyerid, companyName, jobTitle, skillSets, jobDescription) => {
+        closeEditSection(!openEditSection)
+        console.log("openEditSection", openEditSection)
+        console.log(jobID)
+        console.log(empolyerid)
+        console.log(companyName)
+        console.log(jobTitle)
+        console.log(skillSets)
+        console.log(jobDescription)
+
+        setCompanyName(companyName)
+        setJobTitle(jobTitle)
+        setJobDescription(jobDescription)
+        if(skillSets){
+            setjobSkillSet([...skillSets])
+        }
+        setEmpolyerid(empolyerid)
+        setJobID(jobID)
+       
+        // console.log(jobTitle)
+        // console.log()
+        // console.log(jobDescription)
+    }
+
+    const [companyName, setCompanyName] = React.useState('');
+    const [jobTitle, setJobTitle] = React.useState('');
+    const [jobDescription, setJobDescription] = React.useState('');
+    const [jobSkillSet, setjobSkillSet] = React.useState([]);
+    const [empolyerid, setEmpolyerid] = React.useState('')
+    const [jobID, setJobID] = React.useState('')
+
+    const handleJobSkillSet = (e) => {
+        const content = e.target.value;
+        const res = content.split(" ");
+        // console.log(res);
+        setjobSkillSet([...res])
+        // console.log("job", jobSkillSet);
+    }
+
+    const handleJobPostingSubmit = () => {
+        if(companyName === ''  || jobDescription === '' || jobTitle === '') {
+            return;
+        }
+        const from = {companyName, jobTitle, jobDescription, skillSets: jobSkillSet}
+        console.log(from);
+
+        // clear the default messages
+        closeEditSection(false);
+        setCompanyName('');
+        setJobTitle('');
+        setJobDescription('');
+        setjobSkillSet([])
+        setEmpolyerid('')
+        setJobID('')
+
+        const employer_id = empolyerid;
+        const job_id = jobID
+        const URL = `/employer/${employer_id}/${job_id}`;
+        console.log(URL);
+        console.log(from)
+        ApiFun.putApi(URL, from)
+            .then((res=> {
+                window.location.reload();
+                console.log(res);
+            }))
+            .catch((err) => {
+                console.error(err)
+                console.log(12312312);
+            });
+    }
+
+
     return (
         <div>
+            {
+                openEditSection ? (
+                    <form>
+                        <div className='textfields'>
+                            <TextField
+                                required
+                                label="Company Name"
+                                defaultValue={companyName}
+                                onChange={(e)=> setCompanyName(e.target.value)}/>
+
+                             <TextField
+                                required
+                                label="Job Title"
+                                defaultValue={jobTitle}
+                                onChange={(e)=> setJobTitle(e.target.value)}/>
+
+                             <TextField
+                                required
+                                label="Job Skillsets"
+                                defaultValue={jobSkillSet}
+                                multiline
+                                rows={4}
+                                onChange={handleJobSkillSet}/>
+
+                            
+                            <TextField
+                                required
+                                label="Job Description"
+                                defaultValue={jobDescription}
+                                multiline
+                                rows={4}
+                                onChange={(e)=> setJobDescription(e.target.value)}/>
+
+                            <Button variant="contained" 
+                                onClick={handleJobPostingSubmit}
+                                >
+                                Submit
+                            </Button>
+                            <Button variant="contained" 
+                                onClick={() => {closeEditSection(false)}}
+                                >
+                                Close
+                            </Button>
+                        </div>
+                    </form>
+                ) : ""
+            }
         <h1>
             {allAvailableJobs.map(((job) => (
                 <Card className='card'
-                sx={{
-                    boxShadow: 1,
-                    borderRadius: 2,
+                    sx={
+                            isAdmin?{
+                                boxShadow: 1,
+                                borderRadius: 2,
+                                
+                                marginTop: 5,
+                                marginLeft: 5,
+                                
+                                width: 1500,
+                                height:450
+                            } :{boxShadow: 1,
+                                borderRadius: 2,
+                                
+                                marginTop: 5,
+                                marginLeft: 5,
+                                
+                                width: 1500,
+                                height:200} 
+                            
+                            
+                        }
+                        key={job._id}
+                        >
+                        <CardContent>
+                            <Typography gutterBottom variant="h5" component="div">
+                                Company Name: {job.companyName}
+                            </Typography>
+                            <Typography gutterBottom variant="h5" component="div">
+                                Job Title: {job.jobTitle}
+                            </Typography>
+
+                            <Typography gutterBottom variant="h5" component="div">
+                                Skill: 
+                                <div className='skillsets'>
+                                    {
+                                        job.skillSets && job.skillSets.map((skill) =>{
+                                            return (
+                                                
+                                                <div>{skill}</div>
+                                
+                                            )
+                                        })
+                                    }
+                                </div>
+                                </Typography>
+
+                            <Typography gutterBottom variant="h5" component="div">
+                                Job Description: {job.jobDescription}
+                            </Typography>
+                            {
+                                isAdmin && (
+                                    <JobPostingInterviewList jobid={job._id} empolyerid={job.employerId}/>
+                                )
+                            }
+                            
+
+                        </CardContent>
+                        {isStudent && (
+                            <Button variant="contained" 
+                                    color={job.alreadyApplied ? "secondary" : "success" }
+                                    onClick={() => handleApply(job._id)}>
+                                {job.alreadyApplied ? "Applied" : "Apply" }
+                            </Button>
+                        )}
+
+                        {isAdmin && (
+                            <div className='btns'>
+                                <Button variant="contained" 
+                                        color="success" 
+                                        onClick={() => adminHandleEditSection(job._id, job.employerId, job.companyName, job.jobTitle, job.skillSets ,job.jobDescription)}>
+                                    Edit
+                                </Button>
+
+                                <Button variant="contained" 
+                                        color= "error"
+                                        onClick={() => adminHandleRemoveJob(job._id)}>
+                                    Remove
+                                </Button>
+                            </div>
+                        )}
+                    </Card>
+                    )
                     
-                    marginTop: 5,
-                    marginLeft: 5,
-                    
-                    width: 1000,
-                    height: 150
-                    }}
-                    key={job._id}
-                    >
-                    <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                            Company Name: {job.companyName}
-                        </Typography>
-                        <Typography gutterBottom variant="h5" component="div">
-                            Job Title: {job.jobTitle}
-                        </Typography>
-                        <Typography gutterBottom variant="h5" component="div">
-                            Job Description: {job.jobDescription}
-                        </Typography>
-                    </CardContent>
-                    {isStudent && (
-                        <Button variant="contained" 
-                                color={job.alreadyApplied ? "secondary" : "success" }
-                                onClick={() => handleApply(job._id)}>
-                            {job.alreadyApplied ? "Applied" : "Apply" }
-                        </Button>
-                    )}
-                </Card>
-            )))}
+                )
+
+            )}  
         </h1>
     </div>
     );

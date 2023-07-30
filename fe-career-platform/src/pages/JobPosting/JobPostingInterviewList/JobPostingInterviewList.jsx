@@ -7,8 +7,19 @@ export default function JobPostingInterviewList(props)  {
     // to do reload of the job status
     
     const [interviewerData, setInterviewerData] = useState([])
+    const [isAdmin, setIsAdmin] = useState(false);
+
     useEffect(() => {
-        const employer_id = localStorage.getItem('userid');
+        const role = localStorage.getItem('userRole')
+        if(role && role.toLowerCase()  === 'candidate') {
+        }
+
+        if(role && role.toLowerCase()  === 'admin') {
+            setIsAdmin(true)
+        }
+
+        const employer_id = props.empolyerid
+        //localStorage.getItem('userid');
         const job_id = props.jobid;
 
         ApiFun.getApi(`/employer/${employer_id}/jobs/${job_id}/candidates`).then((res) => {
@@ -56,12 +67,31 @@ export default function JobPostingInterviewList(props)  {
         console.log(rejectedList);
     }
 
+    const handleReset = (application_id) => {
+        const accpet = { status: "interview" }
+        ApiFun.putApi(`/employer/application/${application_id}/update`, accpet).then((res) => {
+            console.log(res.data)
+            if(res.status === 200){
+                console.log(acceptedList.filter(id => id.applicationID !== application_id))
+                setAccpetedList(acceptedList.filter(id => id.applicationID !== application_id))
+                setRejectedList(rejectedList.filter(id => id.applicationID !== application_id))
+            }
+        });
+    }
+
     const findInAccpetList = (interviewerID) => {
         return acceptedList.find(accept => accept.applicationID === interviewerID)
     }
 
     const findInRejectedList = (interviewerID) => {
         return rejectedList.find(accept => accept.applicationID === interviewerID)
+    }
+
+    const showName = (name) => {
+        if( name && name.first_name && name.last_name ){
+            return name.first_name + ' ' + name.last_name
+        }
+        return "default Name" 
     }
 
 
@@ -71,7 +101,8 @@ export default function JobPostingInterviewList(props)  {
         {interviewerData.map((interviewer) => {
             return (
                 <div className="line" key={interviewer.application_id}>
-                    <div className="font">Candidate : {interviewer.candidate.first_name + interviewer.candidate.last_name}</div>
+                    <div className="font">Candidate : {showName(interviewer.candidate)}
+                    </div>
                     <div className="btn">
                         <Button 
                             variant="contained" 
@@ -91,6 +122,19 @@ export default function JobPostingInterviewList(props)  {
                             >
                             {findInRejectedList(interviewer.application_id) ? "Rejected" : "Reject"}
                         </Button>
+
+                        {
+                            isAdmin && (
+                                <Button 
+                                    variant="contained" 
+                                    color="secondary"
+                                    onClick={() => handleReset(interviewer.application_id)}
+                                    >
+                                    Reset
+                                </Button>
+                            )
+                        }
+
                     </div>
                 </div>
             )

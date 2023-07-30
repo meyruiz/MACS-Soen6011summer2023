@@ -143,7 +143,8 @@ export default function JobPosting() {
                         </Button>
                     </div>
                     
-                </form>)
+                </form>
+                )
             }
 
             {/* render list of job in here */}
@@ -160,7 +161,7 @@ export default function JobPosting() {
                                 marginLeft: 5,
                                 
                                 width: 1700,
-                                height: 200
+                                height: 400
                             }}
                             key={job._id}
                             >
@@ -175,7 +176,7 @@ export default function JobPosting() {
                                         Skill: 
                                         <div className='skillsets'>
                                             {
-                                                job.skillSets.map((skill) =>{
+                                                job.skillSets && job.skillSets.map((skill) =>{
                                                     return (
                                                         
                                                         <div>{skill}</div>
@@ -190,7 +191,7 @@ export default function JobPosting() {
                                     <Typography variant="body2" color="text.secondary">
                                         Job description: {job.jobDescription}
                                     </Typography>
-                                    <JobPostingInterviewList jobid={job._id}/>
+                                    <JobPostingInterviewList jobid={job._id} empolyerid={localStorage.getItem('userid')}/>
                                     {/* <Typography gutterBottom variant="h5" component="div">
                                         Salary: {job.salary}
                                     </Typography>

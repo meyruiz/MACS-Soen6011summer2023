@@ -17,6 +17,10 @@ class ApiFun {
     static putApi(url,data){
         return axios.put(baseURL + url, data);   
     }
+
+    static deleteApi(url){
+        return axios.delete(baseURL + url);
+    }
 }
 
 export default ApiFun
