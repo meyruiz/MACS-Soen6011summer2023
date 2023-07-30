@@ -269,7 +269,18 @@ class Application():
             return f"Deleted document with ID: {_id}"
         else:
             raise Exception(f"No application found with ID: {_id}")
+<<<<<<< Updated upstream
 
+=======
+    
+    @classmethod
+    def application_count(cls, job_id):
+        applicationcount = mongo.db.applications.find({'job_id':job_id})
+        applications= list(applicationcount)
+        totalcount = len(applications)
+        return (totalcount)
+        
+>>>>>>> Stashed changes
     def json(self):
         return {
             "candidate_id": self.candidate_id,
