@@ -3,6 +3,7 @@ from flask import Blueprint, jsonify, request
 from flask_login import login_required, current_user
 from .model import User, Candidate
 from .extensions import mongo
+import re
 
 admin = Blueprint('admin', __name__)
 
@@ -50,9 +51,9 @@ def queryAllUsers():
             param = param.decode("utf-8")
             if len(values) == 1:
                 value = values[0].decode("utf-8")
-                filter_query[param] = value
+                filter_query[param] = re.compile(value, re.IGNORECASE)
             else:
-                values_str = [value.decode("utf-8") for value in values]
+                values_str = [re.compile(value.decode("utf-8"), re.IGNORECASE) for value in values]
                 filter_query[param] = {"$all": values_str}
         users = mongo.db.users.find(filter_query)
         response = []
