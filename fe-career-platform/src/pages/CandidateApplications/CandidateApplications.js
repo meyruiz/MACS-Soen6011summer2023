@@ -2,10 +2,12 @@ import { Button, Card, CardActions, CardContent, Link, Typography } from '@mui/m
 import React, { Component, useEffect, useState } from 'react'
 import ApiFun from '../../Service/api';
 import Navbar from '../Home/Navbar/navbar';
+import './CandidateApplications.css'
 
 export default function CandidateApplications() {
     const [isStudent, setIsStudent] = useState(false);
     const [appliedJobs, setAppliedJobs] = useState([])
+    const [applicationsFetched, setApplicationsFetched] = useState(false);
 
     useEffect(() => {
         const role = localStorage.getItem('userRole');
@@ -20,13 +22,8 @@ export default function CandidateApplications() {
         // render all applications that the candidate has applied to
         if(candidate_id) {
             ApiFun.getApi(`/candidate/${candidate_id}/jobs`).then((res) => {
-                // console.log(res.data);
-                if (res.data) {
-                    res.data[0].status = "Accepted";
-                    // res.data[1].status = "Pending";
-                    // res.data[2].status = "Rejected";
-                }
-
+                setApplicationsFetched(true);
+                
                 console.log(res.data);
                 setAppliedJobs([...res.data])
             })
@@ -41,40 +38,45 @@ export default function CandidateApplications() {
         <div>
         <Navbar/>
         <h1>
-            {appliedJobs.map(((job) => (
-                <Card className='card'
-                sx={{
-                    boxShadow: 1,
-                    borderRadius: 2,
-                    
-                    marginTop: 5,
-                    marginLeft: 5,
-                    
-                    width: 1000,
-                    height: 150
-                    }}
-                    key={job._id}
-                    >
-                    <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                            Company Name: {job.companyName}
-                        </Typography>
-                        <Typography gutterBottom variant="h5" component="div">
-                            Job Title: {job.jobTitle}
-                        </Typography>
-                        <Typography gutterBottom variant="h5" component="div">
-                            Job Description: {job.jobDescription}
-                        </Typography>
-                    </CardContent>
-                    
-                    <Button variant="contained" 
-                        color={job.status === "Accepted" ? "success" : job.status === "Pending" ? "warning" : "error"}
+            {applicationsFetched == true && (
+            <div>
+                {appliedJobs.length > 0 && appliedJobs.map(((job) => (
+                    <Card className='card'
+                    sx={{
+                        boxShadow: 1,
+                        borderRadius: 2,
+                        
+                        marginTop: 5,
+                        marginLeft: 5,
+                        
+                        width: 1000,
+                        height: 150
+                        }}
+                        key={job._id}
                         >
-                        {job.status}
-                    </Button>
-                    
-                </Card>
-            )))}
+                        <CardContent>
+                            <Typography gutterBottom variant="h5" component="div">
+                                Company Name: {job.companyName}
+                            </Typography>
+                            <Typography gutterBottom variant="h5" component="div">
+                                Job Title: {job.jobTitle}
+                            </Typography>
+                            <Typography gutterBottom variant="h5" component="div">
+                                Job Description: {job.jobDescription}
+                            </Typography>
+                        </CardContent>
+                        
+                        <Button variant="contained" 
+                            color={job.status === "accepted" ? "success" : job.status === "pending" ? "warning" : job.status === "rejected" ? "error" : "info"}
+                            >
+                            {job.status}
+                        </Button>
+                        
+                    </Card>
+                )))}
+                {appliedJobs.length === 0 && (<div className='message'><h3>No applications done yet</h3></div>)}
+            </div>)}
+            {applicationsFetched == false && (<div className='message'><h3>Loading...</h3></div>)} 
         </h1>
     </div>
     );

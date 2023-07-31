@@ -16,6 +16,7 @@ export default function Profile() {
     const [selectedFile, setSelectedFile] = useState('');
     const [pdf, setPdf] = useState('test');
     const [resume_id, setResumeId] = useState('');
+    const [role, setRole] = useState('');
 
 
     const handleFileChange = (event) => {
@@ -118,6 +119,7 @@ export default function Profile() {
         } else {
             candidate_id = localStorage.getItem('userid');
         }
+        setRole(role);
 
         ApiFun.getApi(`/candidate/profile/${candidate_id}`).then((res) => {
             setFirstName(res.data.first_name);
@@ -150,7 +152,7 @@ export default function Profile() {
             <TextField id="lastName" className='textfield' label="Last Name" variant="outlined" value={last_name} onChange={handleLastNameChange} />
             <TextField id="location" className='textfield' label="Location" variant="outlined" value={location} onChange={handleLocationChange} />
             <TextField id="skills" className='textfield' label="Skills" variant="outlined" value={skills} onChange={handleSkillsChange} />
-            <TextField id="email" className='textfield' label="Email" variant="outlined" value={email} onChange={handleEmailChange} />
+            {role != "admin" && (<TextField id="email" className='textfield' label="Email" variant="outlined" value={email} onChange={handleEmailChange} />)}
             <TextField id="phoneNumber" className='textfield' label="Phone Number" variant="outlined" value={phone_number} onChange={handlePhoneNumberChange} />
 
 
