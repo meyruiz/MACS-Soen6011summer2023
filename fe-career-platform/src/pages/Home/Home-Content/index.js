@@ -1,4 +1,4 @@
-import { Button, Card, CardActions, CardContent, IconButton, Link, TextField, Typography } from '@mui/material';
+import { Box, Button, Card, CardActions, CardContent, FormControl, IconButton, InputLabel, Link, MenuItem, Select, TextField, Typography } from '@mui/material';
 import React, { Component, useEffect, useState } from 'react'
 import ApiFun from '../../../Service/api';
 import Navbar from '../../Home/Navbar/navbar'
@@ -160,7 +160,7 @@ export default function CandidateApplications() {
     const onHandleSearch = () => {
         console.log('onHandleSearch', searchQuery);
         setIsSearched(true)
-        ApiFun.getApi('/jobs/all?skillSets='+searchQuery).then((res) => {
+        ApiFun.getApi(`/jobs/all?${searchCategories}=`+searchQuery).then((res) => {
             console.log(res);
             setallAvailableJobs([...res.data])
         })
@@ -174,10 +174,32 @@ export default function CandidateApplications() {
     }
 
 
+    const [searchCategories, setSearchCategories] = React.useState('');
+    const handleChange = (event) => {
+        console.log(event.target)
+        setSearchCategories(event.target.value);
+      };
+
     return (
         <div>
             {isStudent && (
                <form className='search'>
+                <Box sx={{ minWidth: 150 }}>
+                    <FormControl fullWidth>
+                        <InputLabel id="demo-simple-select-label">Search For</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={searchCategories}
+                            label="Search For"
+                            onChange={handleChange}
+                        >
+                        <MenuItem value={"jobTitle"}>JobTitle</MenuItem>
+                        <MenuItem value={"companyName"}>CompanyName</MenuItem>
+                        <MenuItem value={"skillSets"}>Skill</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Box>
                 <TextField
                     id="search-bar"
                     className="text"
