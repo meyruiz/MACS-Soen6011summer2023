@@ -191,8 +191,31 @@ class Candidate(User):
         jobs = []
         for app in applications:
             job = JobPosting.get_jobBYJobId(app["job_id"])
+
+            # application status returned to applied job listing
+            job["status"] = app["status"]
             jobs.append(job)
         return jobs
+    
+    @staticmethod
+    def get_applications_by_candidate(candidate_id):
+        # find all the applications by the candidate
+        applications = mongo.db.applications.find({"candidate_id": candidate_id})
+        return applications
+    
+    @staticmethod
+    def get_application(application_id):
+        # find all the applications by the candidate
+        application = mongo.db.applications.find({"_id": application_id})
+        return application
+    
+    @classmethod
+    def delete(cls, _id):
+        result = mongo.db.candidate.find_one_and_delete({"_id": _id})
+        if result:
+            return f"Deleted document with ID: {_id}"
+        else:
+            raise Exception(f"No application found with ID: {_id}")
     
     def json(self):
         return {
