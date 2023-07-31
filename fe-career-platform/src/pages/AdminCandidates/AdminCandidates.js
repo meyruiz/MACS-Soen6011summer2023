@@ -47,12 +47,22 @@ export default function AdminEmployers() {
         window.location.href = "/profile";
     };
 
-    const handleEraseCandidate = (id) => {
+    const handleEraseCandidate = (userIds) => {
         // erase candidate
         console.log("erase candidate");
-        setCandidatesList(candidatesList.filter(candidate => candidate._id !== id));
+        setCandidatesList(candidatesList.filter(candidate => candidate._id !== userIds));
 
-        // TODO: Call api to erase candidate
+        ApiFun.deleteApi(`/admin/users?userIds=${userIds}`).then((e) => {
+            console.log(e)}
+        ).then((err) => {
+            console.log(err);
+        });
+
+        ApiFun.deleteApi(`/candidate/${userIds}`).then((e) => {
+            console.log(e)}
+        ).then((err) => {
+            console.log(err);
+        });
     };
 
     //localStorage.setItem('userid', e.data.id);
