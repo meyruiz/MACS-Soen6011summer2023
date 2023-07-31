@@ -1,1 +1,19 @@
+.btns{
+    display: flex;
+    gap: 20px;
+}
 
+.search{
+    display: flex;
+    align-items: center;
+    margin-left: 40px;
+    margin-top: 10px;
+}
+
+.text{
+    width: 200px;
+}
+
+.btn-search{
+    margin-left: 20px;
+}

@@ -128,7 +128,7 @@ def findAllJobs():
 def changeApplicationStatusByEmployer(application_id):
     try:
         status = request.json["status"]
-        if  status in ["interview","rejected","accepted"]:
+        if  status in ["pending","interview","rejected","accepted"]:
             result = Application.update_status(application_id,status)
             return {"applicationID": application_id}, 200
         else:
@@ -158,6 +158,7 @@ def findAllCandidatesForOneJob(employer_id, job_id):
                 "job_id": x.job_id,
                 "status": x.status,
                 "application_date": x.application_date,
+                "application_id": str(x._id),
             }) 
         else:
             apps.append({
@@ -175,6 +176,7 @@ def findAllCandidatesForOneJob(employer_id, job_id):
                 "job_id": x.job_id,
                 "status": x.status,
                 "application_date": x.application_date,
+                "application_id": str(x._id),
             })
     return jsonify(status=200, result=apps)
 
