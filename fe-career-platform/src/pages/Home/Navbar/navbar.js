@@ -25,8 +25,12 @@ export default function Navbar() {
     window.location.href = "/candidate/applications";
   }
 
-  const handleAdminEmployers = () => {
+  const handleAdminCandidates = () => {
     window.location.href = "/admin/candidates";
+  }
+
+  const handleAdminEmployers = () => {
+    window.location.href = "/admin/employers";
   }
 
   const handleLogout = () => {
@@ -138,7 +142,10 @@ export default function Navbar() {
                   <MenuItem onClick={handleApplicationsPage}>Applications</MenuItem> 
                 }
                 {isAdmin && 
-                  <MenuItem onClick={handleAdminEmployers}>Candidates</MenuItem> 
+                  <MenuItem onClick={handleAdminCandidates}>Candidates</MenuItem> 
+                }
+                {isAdmin && 
+                  <MenuItem onClick={handleAdminEmployers}>Employers</MenuItem> 
                 }
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
