@@ -56,6 +56,9 @@ This project adapts **Agile** development process. The duration of the project i
 
 * [Sprint 2](https://github.com/meyruiz/MACS-Soen6011summer2023/milestone/2) - Sprint 2 backlog
 
+* [Sprint 3](https://github.com/meyruiz/MACS-Soen6011summer2023/milestone/3) - Sprint 3 backlog
+
+
 See the [open issues](https://github.com/meyruiz/MACS-Soen6011summer2023/issues) for a full list of proposed open issues and plans.
 
 
@@ -71,6 +74,8 @@ The documentation is available on [here](https://github.com/meyruiz/MACS-Soen601
 
 [Sprint 2](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki#sprint2)
 
+[Sprint 3](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki#sprint3)
+
 ## Backend Environment Setup
 **MongoDB Docker Setup**
 ```
@@ -79,10 +84,11 @@ $docker run -d -p 27017:27017 -v {/your/local/directory}:/data/db --name mymongo
 
 
 $brew install mongosh
+$mongosh localhost:27017
+
 or in linux 
 $docker exec -it mymongo mongosh
 
-$mongosh localhost:27017
 
 basic mongodb commands:
 >show dbs
