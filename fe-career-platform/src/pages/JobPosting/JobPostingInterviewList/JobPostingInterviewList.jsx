@@ -53,7 +53,7 @@ export default function JobPostingInterviewList(props)  {
                 setAccpetedList([...acceptedList, res.data])
             }
         });
-        console.log(acceptedList);
+        console.log("acceptedList",acceptedList);
     }
 
     const handleReject = (application_id) => {
@@ -61,10 +61,10 @@ export default function JobPostingInterviewList(props)  {
         ApiFun.putApi(`/employer/application/${application_id}/update`, accpet).then((res) => {
             console.log(res.data)
             if(res.status === 200){
-                setRejectedList([...acceptedList, res.data])
+                setRejectedList([...rejectedList, res.data])
             }
         });
-        console.log(rejectedList);
+        console.log("rejectedList", rejectedList);
     }
 
     const handleReset = (application_id) => {
