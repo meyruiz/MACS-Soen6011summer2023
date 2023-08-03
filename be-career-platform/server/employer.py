@@ -90,11 +90,10 @@ def updateJob(employer_id,job_id):
 
 @employer.route('/employer/<employer_id>/<job_id>', methods=['DELETE'])
 def deleteJob(employer_id,job_id):
-    #todo do authentication
     try:
         JobPosting.delete(job_id)
-        #todo delete associated application tracking  
-
+        #delete all application
+        mongo.db.applications.delete_many({"job_id": job_id})
         return {"jobId": job_id}, 200
     except Exception as e:
         return jsonify({'error': str(e)}), 400
@@ -128,7 +127,7 @@ def findAllJobs():
 def changeApplicationStatusByEmployer(application_id):
     try:
         status = request.json["status"]
-        if  status in ["pending","interview","rejected","accepted"]:
+        if  status in ["interview","rejected","accepted"]:
             result = Application.update_status(application_id,status)
             return {"applicationID": application_id}, 200
         else:
