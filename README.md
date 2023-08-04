@@ -26,6 +26,7 @@ Data Security and Privacy: The login credentials are high security which does no
 **Front-end**
 * [React](https://react.dev/) - The library used for front-end.
 * [JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) - The programming language used for front-end.
+* [NodeJS](https://nodejs.org/en/about) - Supporting front end as cross-platform JavaScript runtime environment.
   
 **Backend-end**
 * [Flask](https://flask.palletsprojects.com/en/2.3.x/) - The lightweight python microservice framework used for back-end.
@@ -35,7 +36,17 @@ Data Security and Privacy: The login credentials are high security which does no
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.    
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
+Step 1 : Ensure you have the mentioned applications downloaded and able to verify by obtaining their versions in your system.
+Step 2 : Follow the backend instructions to have the backend able to receive data.
+Step 3 : Open a Terminal and locate the front end folder and use cd to enter into the folder
+>cd fe-career-platform
+Step 4: Type the command to have your front end running smoothly as well.
+>npm start
+
+(For Windows user: Enable running scripts on your system by running the following command if it is in Restricted mode)
+>Set-ExecutionPolicy RemoteSigned 
+
 
 
 ## Authors
@@ -68,13 +79,10 @@ The documentation is available on [here](https://github.com/meyruiz/MACS-Soen601
 [Minutes](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki/Minutes) - Meeting minutes
 
 [Sprint 1](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki#sprint1)  - Sprint 1 documentation 
- * [User Stories](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki/User-Stories#user-stories)
- * [Task Breakdown](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki/Project-Task-Assignment-and-Breakdown)
- * [Sprint 2 Open Issues and Plan](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki/Open-issues-or-plan-for-next-Sprint#sprint-2-plan)
 
-[Sprint 2](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki#sprint2)
+[Sprint 2](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki#sprint2)  - Sprint 2 documentation
 
-[Sprint 3](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki#sprint3)
+[Sprint 3](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki#sprint3)  - Sprint 3 documentation
 
 ## Backend Environment Setup
 **MongoDB Docker Setup**
