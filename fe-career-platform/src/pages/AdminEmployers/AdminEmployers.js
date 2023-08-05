@@ -6,7 +6,7 @@ import './AdminEmployers.css';
 
 export default function AdminEmployers() {
     const [isAdmin, setIsAdmin] = useState(false);
-    const [candidatesList, setCandidatesList] = useState([])
+    const [employersList, setEmployersList] = useState([])
 
     useEffect(() => {
 
@@ -18,11 +18,11 @@ export default function AdminEmployers() {
             setIsAdmin(true)
         }
 
-        // render all candidates
+        // render all employers
         if(isAdmin) {
-            ApiFun.getApi(`/admin/users?role=candidate`).then((res) => {
+            ApiFun.getApi(`/admin/users?role=employer`).then((res) => {
                 console.log(res.data);
-                setCandidatesList([...res.data])
+                setEmployersList([...res.data])
             })
             .catch((err) => {
                 console.error(err)
@@ -34,7 +34,7 @@ export default function AdminEmployers() {
     const handleEraseEmployer = (id) => {
         // erase candidate
         console.log("erase candidate");
-        setCandidatesList(candidatesList.filter(candidate => candidate._id !== id));
+        setEmployersList(employersList.filter(candidate => candidate._id !== id));
 
         ApiFun.deleteApi(`/admin/users?userIds=${id}`).then((e) => {
             console.log(e)}
@@ -47,7 +47,7 @@ export default function AdminEmployers() {
         <div>
         <Navbar/>
         <h1>
-            {candidatesList.map(((job) => (
+            {employersList.map(((job) => (
                 <Card className='card'
                 sx={{
                     boxShadow: 1,
@@ -68,19 +68,10 @@ export default function AdminEmployers() {
                         <Typography gutterBottom variant="h5" component="div">
                             Email: {job.email}
                         </Typography>
-                        {/* <Typography gutterBottom variant="h5" component="div">
-                            Name: {job.first_name} {job.last_name}
-                        </Typography>
-                        <Typography gutterBottom variant="h5" component="div">
-                            Location: {job.location}
-                        </Typography>
-                        <Typography gutterBottom variant="h5" component="div">
-                            Skills: {job.skills}
-                        </Typography> */}
                     </CardContent>
                         <Button variant="contained" 
                             color="error" onClick={() => handleEraseEmployer(job._id)}
-                            >
+                        >
                             Erase
                         </Button>
                 </Card>
