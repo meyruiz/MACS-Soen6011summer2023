@@ -1,7 +1,7 @@
 from urllib.parse import parse_qs
 from flask import Blueprint, jsonify, request
 from flask_login import login_required, current_user
-from .model import User, Candidate
+from .model import User, Candidate, Admin
 from .extensions import mongo
 import re
 
@@ -69,7 +69,5 @@ def queryAllUsers():
 def deleteAccounts():
     userIds = request.args.getlist("userIds")[0].split(",")
     for id in userIds:
-        print(id)
-        print(type(id))
-        mongo.db.users.delete_one({'_id': id})
+        Admin.delete_account(id)
     return jsonify(status=204)

@@ -24,6 +24,14 @@ class User(UserMixin):
         return False
     def get_id(self):
         return self._id
+    
+    @classmethod
+    def delete(cls, userId):
+        result = mongo.db.users.find_one_and_delete({"_id": userId})
+        if result:
+            return f"Deleted document with ID: {userId}"
+        else:
+            raise Exception(f"No job found with userID: {userId}")
 
     @classmethod
     def get_by_email(cls, email):
@@ -341,6 +349,14 @@ class Resume():
         self.file = file
         self.candidate_id = candidate_id
         self._id = uuid.uuid4().hex if _id is None else _id
+    
+    @classmethod
+    def delete_by_user_id(cls, user_id):
+        result = mongo.db.resumes.find_one_and_delete({"candidate_id": user_id})
+        if result:
+            return f"Deleted document with ID: {user_id}"
+        else:
+            raise Exception(f"No resume found with ID: {user_id}")
 
     @classmethod
     def get_by_id(cls, _id):
@@ -385,3 +401,36 @@ class Resume():
     def save_to_mongo(self):
         # insert a resume document into the database using the json method
         mongo.db.resumes.insert_one(self.json())
+
+class Admin():
+    @classmethod
+    def delete_account(cls, user_id):
+        user = User.get_by_id(user_id)
+        print("User: ", user._id, user.role)
+        if user and user.role.lower() == "employer":
+            # delete all related applications and related job postings
+            # print("Employer: ", user._id, user.email, user.role)
+            jobs = JobPosting.get_jobListsBYEmployerId(user_id)
+            for job in jobs:
+                # print("Job: ", job["_id"], job["jobTitle"])
+                applications = Application.get_by_job_id(job["_id"])
+                for app in applications:
+                    # print("Application: ", app._id, app.status, app.application_date)
+                    Application.delete(app._id)
+                JobPosting.delete(job["_id"])
+            User.delete(user_id)
+        elif user and user.role.lower() == "candidate":
+            # delete all applications, resumes, candidate profiles
+            # print("Candidate: ", user._id, user.email, user.role)
+            applications = Application.get_by_candidate_id(user_id)
+            for app in applications:
+                # print("Application:", app._id, app.status, app.application_date)
+                Application.delete(app._id)
+            resume = Resume.get_by_candidate_id(user_id)
+            if resume:
+                # print("Resume: ", resume["_id"])
+                Resume.delete_by_user_id(user_id)
+            # candidate = Candidate.get_by_id(user_id)
+            # print("Candidate: ", candidate.skills, candidate.phone_number)
+            Candidate.delete(user_id)
+            User.delete(user_id)
