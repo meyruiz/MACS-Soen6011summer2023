@@ -20,9 +20,9 @@ export default function AdminEmployers() {
 
         // render all candidates
         if(isAdmin) {
-            ApiFun.getApi(`/admin/candidates`).then((res) => {
+            ApiFun.getApi(`/admin/users?role=candidate`).then((res) => {
                 console.log(res.data);
-                setCandidatesList([...res.data.result])
+                setCandidatesList([...res.data])
             })
             .catch((err) => {
                 console.error(err)
@@ -58,12 +58,6 @@ export default function AdminEmployers() {
         ).then((err) => {
             console.log(err);
         });
-
-        ApiFun.deleteApi(`/candidate/${id}`).then((e) => {
-            console.log(e)}
-        ).then((err) => {
-            console.log(err);
-        });
     };
 
     return (
@@ -89,16 +83,16 @@ export default function AdminEmployers() {
                             Id: {job._id}
                         </Typography>
                         <Typography gutterBottom variant="h5" component="div">
-                            Email: {job.email}
+                            Email: {job.info.email}
                         </Typography>
                         <Typography gutterBottom variant="h5" component="div">
-                            Name: {job.first_name} {job.last_name}
+                            Name: {job.info.first_name} {job.info.last_name}
                         </Typography>
                         <Typography gutterBottom variant="h5" component="div">
-                            Location: {job.location}
+                            Location: {job.info.location}
                         </Typography>
                         <Typography gutterBottom variant="h5" component="div">
-                            Skills: {job.skills}
+                            Skills: {job.info.skills}
                         </Typography>
                     </CardContent>
 
