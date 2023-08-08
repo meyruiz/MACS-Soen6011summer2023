@@ -32,7 +32,7 @@ export default function Login()  {
         const user = {email, password};
         ApiFun.postApi("/login", user)
           .then((e) => {
-              if(e.status === 200 && e.data.status === 200){
+              if(e.status === 200 && e.data?.status === 200){
                 console.log(e.data);
                 localStorage.setItem('userid', e.data.id);
                 localStorage.setItem('userEmail', e.data.email);
