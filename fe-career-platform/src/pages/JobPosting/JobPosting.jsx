@@ -56,7 +56,7 @@ export default function JobPosting() {
 
     const handleJobSkillSet = (e) => {
         const content = e.target.value;
-        const res = content.split(" ");
+        const res = content.split(",");
         // console.log(res);
         setjobSkillSet([...res])
         // console.log("job", jobSkillSet);
@@ -98,12 +98,11 @@ export default function JobPosting() {
     const handleEditSection = (jobID, empolyerid, companyName, jobTitle, skillSets, jobDescription) => {
         closeEditSection(!openEditSection)
         console.log("openEditSection", openEditSection)
-        console.log(jobID)
-        console.log(empolyerid)
-        console.log(companyName)
-        console.log(jobTitle)
-        console.log(skillSets)
-        console.log(jobDescription)
+        // console.log(jobID)
+        // console.log(empolyerid)
+        // console.log(companyName)
+        // console.log(jobTitle)
+        // console.log(jobDescription)
 
         setCompanyName(companyName)
         setJobTitle(jobTitle)
@@ -174,7 +173,7 @@ export default function JobPosting() {
 
                              <TextField
                                 required
-                                label="Job Skillsets"
+                                label="Job Skillsets (Split by comma)"
                                 defaultValue={jobSkillSet}
                                 multiline
                                 rows={4}
