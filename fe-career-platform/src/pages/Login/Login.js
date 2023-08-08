@@ -29,7 +29,7 @@ export default function Login()  {
 
     const handleLogin = (event) => {
         event.preventDefault();
-        const user = {email, password};
+        const user = {email: email.toLowerCase(), password};
         ApiFun.postApi("/login", user)
           .then((e) => {
               if(e.status === 200 && e.data?.status === 200){

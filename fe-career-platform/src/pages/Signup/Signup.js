@@ -37,9 +37,9 @@ export default function Signup() {
     event.preventDefault();
 
     if (!emailError) {
+      const user = {role:userType, email: email.toLowerCase(), password}
       console.log('signup submitted:', userType, email, password);
 
-      const user = {role:userType, email, password}
       ApiFun.postApi("/signup", user)
           .then((e) => {
             console.log(e.data);
