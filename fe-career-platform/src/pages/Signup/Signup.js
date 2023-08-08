@@ -42,9 +42,13 @@ export default function Signup() {
       const user = {role:userType, email, password}
       ApiFun.postApi("/signup", user)
           .then((e) => {
-              if(e.status === 200){
-                // console.log(e.data);
+            console.log(e.data);
+              if(e.status === 200 && e.data?.status === 201){
                 window.location.href = "/login";
+              } else if (e.data?.status === 403) {
+                alert("An account with this email already exists");
+              } else {
+                alert("Something went wrong. Please try again later.");
               }
             })
     }
