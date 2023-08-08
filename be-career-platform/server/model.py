@@ -332,7 +332,7 @@ class Status():
     @classmethod
     def is_valid(cls, status):
         # check if a given status value is valid
-        return status in [cls.PENDING, cls.ACCEPTED, cls.ACCEPTED, cls.REJECTED]
+        return status in [cls.PENDING, cls.INTERVIEW, cls.ACCEPTED, cls.REJECTED]
 
 
 class Resume():
