@@ -118,7 +118,7 @@ export default function CandidateApplications() {
 
     const handleJobSkillSet = (e) => {
         const content = e.target.value;
-        const res = content.split(" ");
+        const res = content.split(",");
         // console.log(res);
         setjobSkillSet([...res])
         // console.log("job", jobSkillSet);
@@ -245,7 +245,7 @@ export default function CandidateApplications() {
 
                              <TextField
                                 required
-                                label="Job Skillsets"
+                                label="Job Skillsets(Split by comma)"
                                 defaultValue={jobSkillSet}
                                 multiline
                                 rows={4}
