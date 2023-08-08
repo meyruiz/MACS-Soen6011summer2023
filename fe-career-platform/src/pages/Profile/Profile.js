@@ -176,7 +176,7 @@ export default function Profile() {
 
 
             <h5>Upload your resume</h5>
-            <input type="file" onChange={handleFileChange} />
+            <input type="file" accept="application/pdf" onChange={handleFileChange} />
 
             <div>
                 <iframe src={pdf} width="100%" height="600px" title="PDF Viewer" /> 
