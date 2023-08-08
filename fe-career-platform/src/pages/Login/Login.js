@@ -32,15 +32,16 @@ export default function Login()  {
         const user = {email, password};
         ApiFun.postApi("/login", user)
           .then((e) => {
-              if(e.status === 200){
+              if(e.status === 200 && e.data.status === 200){
                 console.log(e.data);
                 localStorage.setItem('userid', e.data.id);
                 localStorage.setItem('userEmail', e.data.email);
                 localStorage.setItem('userRole', e.data.role);
-                // console.log(localStorage.getItem('userid'));
-                // console.log(localStorage.getItem('userEmail'));
-                // console.log(localStorage.getItem('userRole'));
                 window.location.href = "/";
+              } else if (e.data?.status !== 200) {
+                  alert("Invalid email or password");
+              } else {
+                  alert("Something went wrong. Please try again later.");
               }
             })
       };
