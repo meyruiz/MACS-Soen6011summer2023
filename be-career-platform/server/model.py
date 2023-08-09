@@ -5,7 +5,6 @@ from flask_login import UserMixin
 from .extensions import bcrypt
 from flask import session
 from datetime import datetime
-import json
 
 
 class User(UserMixin):

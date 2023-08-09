@@ -58,7 +58,21 @@ def queryAllUsers():
         users = mongo.db.users.find(filter_query)
         response = []
         for user in users:
-            user.pop('password',None)
+            user.pop('password', None)
+            if user["role"].lower() == "candidate":
+                x = Candidate.get_by_id(user["_id"])
+                user["info"] = {
+                    "_id": x._id,
+                    "email": x.email,
+                    "role": x.role,
+                    "first_name": x.first_name,
+                    "last_name": x.last_name,
+                    "phone_number": x.phone_number,
+                    "description": x.description,
+                    "location": x.location,
+                    "skills": x.skills,
+                    "previous_experience": x.previous_experience,
+                }
             response.append(user)
         return jsonify(response) , 200
     except Exception as e:
