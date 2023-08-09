@@ -41,9 +41,11 @@ def findAllCandidates():
         })
     return jsonify(status=200, result=candidates)
 
+#Query all user accounts 
 @admin.route('/admin/users',methods = ['GET'])
 def queryAllUsers():
     try:
+        #get query list
         query_string = request.query_string
         parsed_query = parse_qs(query_string)
         filter_query = {}
@@ -55,6 +57,8 @@ def queryAllUsers():
             else:
                 values_str = [re.compile(value.decode("utf-8"), re.IGNORECASE) for value in values]
                 filter_query[param] = {"$all": values_str}
+        
+        #filter user accounts
         users = mongo.db.users.find(filter_query)
         response = []
         for user in users:
