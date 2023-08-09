@@ -127,7 +127,7 @@ def findAllJobs():
 def changeApplicationStatusByEmployer(application_id):
     try:
         status = request.json["status"]
-        if  status in ["interview","rejected","accepted"]:
+        if  status in ["interview","rejected","accepted","pending"]:
             result = Application.update_status(application_id,status)
             return {"applicationID": application_id}, 200
         else:
