@@ -276,7 +276,7 @@ export default function CandidateApplications() {
             }
         <h1>
             {allAvailableJobs.map(((job) => (
-                <Card className='card'
+                <Card style={{maxHeight: '400px', height:"unset"}} className='card'
                     sx={
                             isAdmin?{
                                 boxShadow: 1,

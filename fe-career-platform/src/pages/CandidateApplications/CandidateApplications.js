@@ -41,7 +41,7 @@ export default function CandidateApplications() {
             {applicationsFetched == true && (
             <div>
                 {appliedJobs.length > 0 && appliedJobs.map(((job) => (
-                    <Card className='card'
+                    <Card className='card' style={{maxHeight: '400px', height:"unset"}}
                     sx={{
                         boxShadow: 1,
                         borderRadius: 2,
@@ -54,7 +54,7 @@ export default function CandidateApplications() {
                         }}
                         key={job._id}
                         >
-                        <CardContent>
+                        <CardContent  style={{flexGrow: 1}}>
                             <Typography gutterBottom variant="h5" component="div">
                                 Company Name: {job.companyName}
                             </Typography>
@@ -66,10 +66,10 @@ export default function CandidateApplications() {
                             </Typography>
                         </CardContent>
                         
-                        <Button variant="contained" 
+                        <Button className='status' variant="contained"
                             color={job.status === "accepted" ? "success" : job.status === "pending" ? "warning" : job.status === "rejected" ? "error" : "info"}
                             >
-                            {job.status}
+                            <span>{job.status}</span>
                         </Button>
                         
                     </Card>
