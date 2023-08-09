@@ -6,6 +6,7 @@ from bson import json_util
 from urllib.parse import parse_qs
 import json
 
+#Employer Endpoint
 employer = Blueprint('employer', __name__)
 
 
@@ -30,10 +31,9 @@ def profile():
     return "in employer profile"
 
 
+#Support Post a Job
 @employer.route('/employer/post/<employerId>', methods=['POST'])
-# @login_required
 def postJob(employerId):
-    #todo authentication
     try:
         print(request.json)
         jobTitle = request.json["jobTitle"]
@@ -48,10 +48,12 @@ def postJob(employerId):
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
+#Support get Job by JobId
 @employer.route('/employer/<employer_id>/<job_id>', methods=['GET'])
 def getJobByJobId(employer_id,job_id):
-    #todo authentication
+
     user = mongo.db.users.find_one({"_id": employer_id})
+    #Autherization
     if user == None:
         flash('Not logined', 'danger')
         return "failed authentication"
@@ -60,19 +62,15 @@ def getJobByJobId(employer_id,job_id):
     job = JobPosting.get_jobBYJobId(job_id)
     return jsonify(str(job)), 200
 
+#Get a list of jobs
 @employer.route('/employer/<employer_id>/jobs', methods=['GET'])
 def getJobsByEmployerId(employer_id):
     jobLists = JobPosting.get_jobListsBYEmployerId(employer_id)
     return jsonify(list(jobLists)) , 200
 
-
+#Support update any job information
 @employer.route('/employer/<employer_id>/<job_id>', methods=['PUT'])
 def updateJob(employer_id,job_id):
-    #todo authentication
-    # user = mongo.db.users.find_one({"_id": employer_id})
-    # if user == None:
-    #     flash('Not logined', 'danger')
-    #     return "failed authentication"
     try: 
         fields = ["jobTitle","jobDescription","companyName","skillSets"]
         updateInfo = {}
@@ -88,6 +86,7 @@ def updateJob(employer_id,job_id):
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
+#support delete a job by id 
 @employer.route('/employer/<employer_id>/<job_id>', methods=['DELETE'])
 def deleteJob(employer_id,job_id):
     try:
@@ -98,10 +97,11 @@ def deleteJob(employer_id,job_id):
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
+#Query jobs 
 @employer.route('/jobs/all', methods=['GET'])
 def findAllJobs():
-    #todo do authentication
     try:
+        #Extract query lists
         query_string = request.query_string
         parsed_query = parse_qs(query_string)
         print(parsed_query)
@@ -116,6 +116,8 @@ def findAllJobs():
                 values_str = [value.decode("utf-8") for value in values]
                 filter_query[param] = {"$all": values_str}
         print(filter_query)
+
+        #find filtered jobs
         jobs = mongo.db.jobs.find(filter_query)
         records = list(jobs)
         records_list = [record for record in records]
@@ -136,11 +138,8 @@ def changeApplicationStatusByEmployer(application_id):
         return jsonify({'error': str(e)}), 400
 
 @employer.route('/employer/<employer_id>/jobs/<job_id>/candidates', methods=['GET'])
-# @login_required
+
 def findAllCandidatesForOneJob(employer_id, job_id):
-    # if notEmployerRole():
-    #     return jsonify(status=403, msg="You are not an employer.")
-    # current_user_id = current_user.get_id()
     current_user_id = employer_id
     job = JobPosting.get_jobBYJobId(job_id)
     if job is None:
@@ -179,13 +178,13 @@ def findAllCandidatesForOneJob(employer_id, job_id):
             })
     return jsonify(status=200, result=apps)
 
+#get application by id
 @employer.route('/application/<application_id>', methods=['GET'])
 def getApplicationByApplicationId(application_id):
-    #todo authentication
-
     application = mongo.db.applications.find_one({"_id":application_id})
     return jsonify(application), 200
 
+#get a list of application belongs to one job
 @employer.route('/employer/applications/job/<job_id>', methods=['GET'])
 def getApplicationsByJobId(job_id):
     try:
@@ -199,6 +198,7 @@ def getApplicationsByJobId(job_id):
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
+#get a list of application of jobs posted by one employer 
 @employer.route('/employer/<employer_id>/applications/all', methods=['GET'])
 def findAllApplicationsByEmployerId(employer_id):
     # try: 
@@ -218,5 +218,3 @@ def findAllApplicationsByEmployerId(employer_id):
         })
         response.append(record)
     return jsonify(response) , 200
-    # except Exception as e:
-    #     return jsonify({'error': str(e)}), 400
