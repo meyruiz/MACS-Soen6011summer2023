@@ -10,6 +10,8 @@ from bson.json_util import dumps
 candidate = Blueprint('candidate', __name__)
 
 def notCandidateRole():
+    print(f'Current user: {current_user}')
+    print(f'Current user ID: {current_user.get_id()}')
     find_user =  User.get_by_id(current_user.get_id())
     if find_user.role.lower() != "candidate":
         return True
@@ -100,6 +102,7 @@ def update_profile(candidate_id):
 
     # create a custom response with the updated document, a success message and status code 200
     response = jsonify({"candidate": updated_document, "message": "Candidate profile updated successfully"})
+
     response.status_code = 200
     return response
 
