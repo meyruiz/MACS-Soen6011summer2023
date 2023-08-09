@@ -34,7 +34,7 @@ def signup():
     
 
 @auth.route('/logout', methods=['POST'])
-@login_required
+# @login_required
 def logout():
     logout_user()
     return jsonify(status=200)
