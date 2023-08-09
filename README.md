@@ -41,6 +41,7 @@ Step 1 : Ensure you have the mentioned applications downloaded and able to verif
 Step 2 : Follow the backend instructions to have the backend able to receive data.
 Step 3 : Open a Terminal and locate the front end folder and use cd to enter into the folder
 >cd fe-career-platform
+
 Step 4: Type the command to have your front end running smoothly as well.
 >npm start
 
@@ -69,7 +70,8 @@ This project adapts **Agile** development process. The duration of the project i
 
 * [Sprint 3](https://github.com/meyruiz/MACS-Soen6011summer2023/milestone/3) - Sprint 3 backlog
 
-
+* [Sprint 4](https://github.com/meyruiz/MACS-Soen6011summer2023/milestone/4) - Sprint 4 backlog
+  
 See the [open issues](https://github.com/meyruiz/MACS-Soen6011summer2023/issues) for a full list of proposed open issues and plans.
 
 
@@ -83,6 +85,8 @@ The documentation is available on [here](https://github.com/meyruiz/MACS-Soen601
 [Sprint 2](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki#sprint2)  - Sprint 2 documentation
 
 [Sprint 3](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki#sprint3)  - Sprint 3 documentation
+
+[Sprint 4](https://github.com/meyruiz/MACS-Soen6011summer2023/wiki#sprint4)   - Sprint 4 documentation
 
 ## Backend Environment Setup
 **MongoDB Docker Setup**
